@@ -1,0 +1,50 @@
+{
+  "name": "artemis",
+  "version": "0.4.0",
+  "description": "Compañero de exobiología para Elite Dangerous (Odyssey)",
+  "author": "Mayca",
+  "license": "MIT",
+  "main": "./out/main/index.js",
+  "scripts": {
+    "dev": "electron-vite dev",
+    "build": "electron-vite build",
+    "start": "electron-vite preview",
+    "simulate": "node scripts/simulate.mjs",
+    "dist": "electron-vite build && electron-builder --win --publish never"
+  },
+  "build": {
+    "appId": "com.mayca.artemis",
+    "productName": "Artemis",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "out/**",
+      "resources/**",
+      "package.json"
+    ],
+    "win": {
+      "target": [
+        "nsis"
+      ],
+      "icon": "build/icon.ico"
+    },
+    "nsis": {
+      "oneClick": true,
+      "deleteAppDataOnUninstall": false,
+      "artifactName": "Artemis-Setup-${version}.${ext}"
+    }
+  },
+  "dependencies": {
+    "chokidar": "^3.6.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.3.4",
+    "electron": "^33.2.0",
+    "electron-builder": "^25.1.8",
+    "electron-vite": "^2.3.0",
+    "vite": "^5.4.11"
+  }
+}

@@ -1,0 +1,104 @@
+import React, { useState } from 'react'
+import { useArtemis } from './useArtemis.js'
+import { useT } from './i18n.js'
+import { useTheme } from './theme.js'
+import { useSounds } from './useSounds.js'
+import SystemPanel from './components/SystemPanel.jsx'
+import Targets from './components/Targets.jsx'
+import VaultPanel from './components/VaultPanel.jsx'
+import Library from './components/Library.jsx'
+import SessionPanel from './components/SessionPanel.jsx'
+import CmdrPanel from './components/CmdrPanel.jsx'
+import SettingsPanel from './components/SettingsPanel.jsx'
+import Onboarding from './components/Onboarding.jsx'
+import {
+  IconPlanet,
+  IconRadar,
+  IconWallet,
+  IconChart,
+  IconUser,
+  IconSettings,
+  IconLeaf,
+  IconMinus,
+  IconX
+} from './Icons.jsx'
+
+const TABS = [
+  ['sistema', 'navSystem', IconPlanet],
+  ['objetivos', 'navTargets', IconRadar],
+  ['cartera', 'navVault', IconWallet],
+  ['biblioteca', 'navLibrary', IconLeaf],
+  ['sesion', 'navSession', IconChart],
+  ['cmdr', 'navCmdr', IconUser],
+  ['ajustes', 'navSettings', IconSettings]
+]
+
+export default function App() {
+  const state = useArtemis()
+  const [tab, setTab] = useState('sistema')
+  const lang = state?.settings?.lang || 'es'
+  const t = useT(lang)
+  useTheme(state?.settings?.theme)
+  useSounds(state)
+
+  if (!state) return null
+
+  const connected = !!state.commander.name && !state.watcherError
+
+  return (
+    <div className="app">
+      {!state.settings.onboarded && <Onboarding lang={lang} />}
+
+      <div className="titlebar">
+        <div className="logo">
+          <IconLeaf size={18} />
+        </div>
+        <div>
+          <h1>ARTEMIS</h1>
+          <div className="sub">{t('subtitle')}</div>
+        </div>
+        <span className="spacer" />
+        {state.watcherError && <span className="chip warn">⚠ {state.watcherError}</span>}
+        <span className="chip">
+          <span className={`dot ${connected ? '' : 'off'}`} />
+          {state.commander.name ? `CMDR ${state.commander.name}` : t('waitingJournal')}
+        </span>
+        <div className="winbtns">
+          <button title={t('minimize')} onClick={() => window.artemis.minimize()}>
+            <IconMinus size={16} />
+          </button>
+          <button className="close" title={t('close')} onClick={() => window.artemis.close()}>
+            <IconX size={16} />
+          </button>
+        </div>
+      </div>
+
+      <div className="main">
+        <nav className="sidebar">
+          {TABS.map(([id, labelKey, Icon]) => (
+            <button key={id} className={tab === id ? 'active' : ''} onClick={() => setTab(id)}>
+              <Icon size={19} />
+              {t(labelKey)}
+            </button>
+          ))}
+          <div className="push" />
+          <div className="hint">
+            {t('overlayHint')}: <b>Ctrl+Alt+O</b>
+            <br />
+            {t('ghostHint')}: <b>Ctrl+Alt+M</b>
+          </div>
+        </nav>
+
+        <div className="content">
+          {tab === 'sistema' && <SystemPanel state={state} t={t} />}
+          {tab === 'objetivos' && <Targets state={state} t={t} />}
+          {tab === 'cartera' && <VaultPanel state={state} t={t} />}
+          {tab === 'biblioteca' && <Library state={state} t={t} lang={lang} />}
+          {tab === 'sesion' && <SessionPanel state={state} t={t} lang={lang} />}
+          {tab === 'cmdr' && <CmdrPanel state={state} t={t} lang={lang} />}
+          {tab === 'ajustes' && <SettingsPanel state={state} t={t} />}
+        </div>
+      </div>
+    </div>
+  )
+}
