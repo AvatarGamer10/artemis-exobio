@@ -72,6 +72,7 @@ export default function App() {
           </button>
         </div>
       </div>
+      <div className="ruler" aria-hidden="true" />
 
       <div className="main">
         <nav className="sidebar">

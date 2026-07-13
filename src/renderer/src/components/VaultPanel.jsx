@@ -46,7 +46,7 @@ export default function VaultPanel({ state, t }) {
             <tbody>
               {vault.map((v) => (
                 <tr key={v.id} className={v.maybeFirstLogged ? 'first' : ''}>
-                  <td>{v.species}{v.maybeFirstLogged ? ' ★' : ''}</td>
+                  <td><span className="species">{v.species}</span>{v.maybeFirstLogged ? ' ★' : ''}</td>
                   <td>{v.variant || '—'}</td>
                   <td>{v.body || '—'}</td>
                   <td className="num">{cr(v.value * (v.maybeFirstLogged ? 5 : 1))}</td>

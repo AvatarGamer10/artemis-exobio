@@ -78,7 +78,7 @@ export default function Library({ state, t, lang }) {
                 <tbody>
                   {filtered.slice(0, MAX_ROWS).map((e) => (
                     <tr key={e.id} className={e.maybeFirstLogged ? 'first' : ''}>
-                      <td>{e.species}{e.maybeFirstLogged ? ' ★' : ''}</td>
+                      <td><span className="species">{e.species}</span>{e.maybeFirstLogged ? ' ★' : ''}</td>
                       <td>{e.variant || '—'}</td>
                       <td>{e.system || '—'}</td>
                       <td>{e.body || '—'}</td>

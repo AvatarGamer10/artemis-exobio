@@ -1,6 +1,7 @@
 import React from 'react'
 import { cr } from '../useArtemis.js'
 import SystemMap from './SystemMap.jsx'
+import SamplerDial from './SamplerDial.jsx'
 import { IconPlanet, IconLeaf, IconWalk, IconRadar, IconCheck, IconSync } from '../Icons.jsx'
 
 function ExternalContext({ ext, t }) {
@@ -58,36 +59,41 @@ function ExternalContext({ ext, t }) {
 
 function Sampling({ s, t }) {
   if (!s) return null
-  const pct = s.colonyRange ? Math.min(100, (s.currentDist / s.colonyRange) * 100) : 0
   return (
     <div className="panel">
       <h2>
-        <IconWalk size={16} /> {t('samplingTitle')} — {s.species?.toUpperCase()}
+        <IconWalk size={16} /> {t('samplingTitle')}
       </h2>
-      <div className="kv">
-        <span className="k">{t('variant')}</span>
-        <span className="v">{s.variant || '—'}</span>
-        <span className="k">{t('valueOnDone')}</span>
-        <span className="v hi">{cr(s.value)}</span>
+      <div className="dial-wrap">
+        <SamplerDial
+          step={s.step}
+          dist={s.currentDist}
+          range={s.colonyRange}
+          clear={s.clear}
+        />
+        <div className="dial-info">
+          <div className="species" style={{ fontSize: 19, marginBottom: 10 }}>
+            {s.species}
+          </div>
+          <div className="kv">
+            <span className="k">{t('variant')}</span>
+            <span className="v">{s.variant || '—'}</span>
+            <span className="k">{t('valueOnDone')}</span>
+            <span className="v hi">{cr(s.value)}</span>
+            {s.colonyRange != null && (
+              <>
+                <span className="k">{t('colonyDist')}</span>
+                <span className="v">⌀ {s.colonyRange} m</span>
+              </>
+            )}
+          </div>
+          {s.colonyRange != null && (
+            <div className={s.clear ? 'v good' : 'muted'} style={{ marginTop: 10 }}>
+              {s.clear ? t('colonyClear') : t('colonyMove')}
+            </div>
+          )}
+        </div>
       </div>
-      <div className="steps">
-        {[1, 2, 3].map((i) => (
-          <div key={i} className={`step ${s.step >= i ? 'done' : ''}`} />
-        ))}
-      </div>
-      {s.colonyRange != null && (
-        <>
-          <div className="muted">
-            {t('colonyDist')}: {s.currentDist ?? 0} m / {s.colonyRange} m
-          </div>
-          <div className="bar-wrap">
-            <div className={`bar ${s.clear ? 'ok' : ''}`} style={{ width: pct + '%' }} />
-          </div>
-          <div className={s.clear ? 'v good' : 'muted'}>
-            {s.clear ? t('colonyClear') : t('colonyMove')}
-          </div>
-        </>
-      )}
     </div>
   )
 }
@@ -115,6 +121,7 @@ function Predictions({ b, t }) {
             {p.value >= 15000000 ? '★ ' : ''}
             {p.species}
           </span>
+          <span className="leader" />
           <span className="pred-val">{cr(p.value)}</span>
         </div>
       ))}
@@ -142,7 +149,8 @@ function BioBody({ b, isCurrent, t }) {
       {b.genuses.map((g) => (
         <div key={g.genus} className={`genus-row ${g.completed ? 'done' : ''}`}>
           <span className="check">{g.completed ? <IconCheck size={15} /> : null}</span>
-          <span className={g.completed ? '' : 'pending'}>{g.localised}</span>
+          <span className="pending">{g.localised}</span>
+          <span className="leader" />
           {g.colonyRange && <span className="range">⌀ {g.colonyRange} m</span>}
         </div>
       ))}

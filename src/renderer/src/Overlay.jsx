@@ -2,6 +2,7 @@ import React from 'react'
 import { useArtemis, cr } from './useArtemis.js'
 import { useT } from './i18n.js'
 import { useTheme } from './theme.js'
+import SamplerDial from './components/SamplerDial.jsx'
 
 export default function Overlay() {
   const state = useArtemis()
@@ -16,7 +17,6 @@ export default function Overlay() {
     bodies.find((b) => b.name === state.currentBodyName) ||
     bodies.find((b) => b.name === state.status.bodyName)
   const s = state.sampling
-  const pct = s?.colonyRange ? Math.min(100, (s.currentDist / s.colonyRange) * 100) : 0
 
   return (
     <div className="ov">
@@ -33,22 +33,16 @@ export default function Overlay() {
             <h3>
               {t('ovSampling')} — {s.genusLocalised?.toUpperCase()}
             </h3>
-            <div className="ov-big">{s.species}</div>
-            <div className="steps">
-              {[1, 2, 3].map((i) => (
-                <div key={i} className={`step ${s.step >= i ? 'done' : ''}`} />
-              ))}
+            <div className="ov-big" style={{ textAlign: 'center' }}>{s.species}</div>
+            <div className="ov-dial">
+              <SamplerDial
+                step={s.step}
+                dist={s.currentDist}
+                range={s.colonyRange}
+                clear={s.clear}
+                size={150}
+              />
             </div>
-            {s.colonyRange != null && (
-              <>
-                <div className={`ov-dist ${s.clear ? 'ok' : 'no'}`}>
-                  {s.currentDist ?? 0} / {s.colonyRange} m
-                </div>
-                <div className="bar-wrap">
-                  <div className={`bar ${s.clear ? 'ok' : ''}`} style={{ width: pct + '%' }} />
-                </div>
-              </>
-            )}
           </div>
         )}
 
@@ -59,7 +53,8 @@ export default function Overlay() {
               current.genuses.map((g) => (
                 <div key={g.genus} className={`genus-row ${g.completed ? 'done' : ''}`}>
                   <span className="check">{g.completed ? '✓' : ''}</span>
-                  <span className={g.completed ? '' : 'pending'}>{g.localised}</span>
+                  <span className="pending">{g.localised}</span>
+                  <span className="leader" />
                   {g.colonyRange && <span className="range">{g.colonyRange} m</span>}
                 </div>
               ))
@@ -78,7 +73,10 @@ export default function Overlay() {
             <h3>{t('ovBioBodies')}</h3>
             {bodies.map((b) => (
               <div key={b.id} className="genus-row">
-                <span className="pending">{b.name}</span>
+                <span className="pending" style={{ fontFamily: 'var(--mono)', fontStyle: 'normal', fontSize: 12 }}>
+                  {b.name}
+                </span>
+                <span className="leader" />
                 <span className="range">
                   {b.bioCount} {t('ovSignals')}
                   {b.predictions?.[0]

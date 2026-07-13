@@ -37,6 +37,17 @@ export default function SystemMap({ state, t }) {
           style={{ minWidth: Math.min(W, 900), height: 'auto' }}
         >
           <line className="orbit-line" x1={pad} y1={y} x2={W - pad} y2={y} />
+          {/* graduación de carta de prospección sobre la línea base */}
+          {Array.from({ length: Math.floor((W - pad * 2) / 25) + 1 }).map((_, i) => (
+            <line
+              key={`t${i}`}
+              className="survey-tick"
+              x1={pad + i * 25}
+              y1={y - (i % 4 === 0 ? 6 : 3)}
+              x2={pad + i * 25}
+              y2={y}
+            />
+          ))}
           {bodies.map((b, i) => {
             const x = pad + step * i
             const r = radius(b)
