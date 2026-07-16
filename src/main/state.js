@@ -250,6 +250,10 @@ export function applyJournalEvent(state, ev, { live } = { live: true }) {
           ? { lat: state.status.lat, lon: state.status.lon }
           : null
       if (!state.sampling || state.sampling.species !== speciesLoc) {
+        // ¿Variante (o especie) que nunca ha entrado en la biblioteca?
+        const isNewVariant = variantLoc
+          ? !state.library.some((l) => l.variant === variantLoc)
+          : !state.library.some((l) => l.species === speciesLoc)
         state.sampling = {
           genus: ev.Genus,
           genusLocalised: genusLoc,
@@ -260,6 +264,7 @@ export function applyJournalEvent(state, ev, { live } = { live: true }) {
           lastSamplePos: pos,
           currentDist: 0,
           clear: false,
+          isNewVariant,
           value: getSpeciesValue(speciesLoc, genusLoc)
         }
       } else {

@@ -72,8 +72,9 @@ function Sampling({ s, t }) {
           clear={s.clear}
         />
         <div className="dial-info">
-          <div className="species" style={{ fontSize: 19, marginBottom: 10 }}>
-            {s.species}
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 10, flexWrap: 'wrap' }}>
+            <span className="species" style={{ fontSize: 19 }}>{s.species}</span>
+            {s.isNewVariant && <span className="new-badge">✦ {t('ovNewVariant')}</span>}
           </div>
           <div className="kv">
             <span className="k">{t('variant')}</span>
@@ -98,7 +99,8 @@ function Sampling({ s, t }) {
   )
 }
 
-function Predictions({ b, t }) {
+function Predictions({ b, t, library }) {
+  const gotSpecies = new Set((library || []).map((l) => l.species))
   let preds = b.predictions || []
   const filtered = b.genuses.length > 0
   if (filtered) {
@@ -121,6 +123,9 @@ function Predictions({ b, t }) {
             {p.value >= 15000000 ? '★ ' : ''}
             {p.species}
           </span>
+          {!gotSpecies.has(p.species) && (
+            <span className="new-badge" style={{ fontSize: 8 }}>{t('predNew')}</span>
+          )}
           <span className="leader" />
           <span className="pred-val">{cr(p.value)}</span>
         </div>
@@ -132,7 +137,7 @@ function Predictions({ b, t }) {
   )
 }
 
-function BioBody({ b, isCurrent, t }) {
+function BioBody({ b, isCurrent, t, library }) {
   return (
     <div className="panel">
       <h2>
@@ -154,7 +159,7 @@ function BioBody({ b, isCurrent, t }) {
           {g.colonyRange && <span className="range">⌀ {g.colonyRange} m</span>}
         </div>
       ))}
-      <Predictions b={b} t={t} />
+      <Predictions b={b} t={t} library={library} />
     </div>
   )
 }
@@ -205,7 +210,13 @@ export default function SystemPanel({ state, t }) {
         </div>
       ) : (
         bodies.map((b) => (
-          <BioBody key={b.id} b={b} isCurrent={b.name === state.currentBodyName} t={t} />
+          <BioBody
+            key={b.id}
+            b={b}
+            isCurrent={b.name === state.currentBodyName}
+            t={t}
+            library={state.library}
+          />
         ))
       )}
     </>

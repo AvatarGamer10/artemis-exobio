@@ -45,6 +45,7 @@ const DEMO_STATE = {
     colonyRange: 500,
     currentDist: 340,
     clear: false,
+    isNewVariant: true,
     value: 8418000
   },
   vault: [
@@ -102,6 +103,8 @@ const DEMO_STATE = {
     cmdrName: 'Mayca',
     lang: 'es',
     theme: null,
+    sounds: { enabled: true, volume: 0.5 },
+    notify: { enabled: true },
     // con ?tour en la URL se previsualiza el asistente de primer arranque
     onboarded: !window.location.search.includes('tour')
   },

@@ -1,4 +1,14 @@
-import { app, BrowserWindow, dialog, ipcMain, globalShortcut, screen, shell, nativeImage } from 'electron'
+import {
+  app,
+  BrowserWindow,
+  dialog,
+  ipcMain,
+  globalShortcut,
+  screen,
+  shell,
+  nativeImage,
+  Notification
+} from 'electron'
 import fs from 'node:fs'
 import path from 'node:path'
 import { JournalWatcher, defaultJournalDir } from './journal.js'
@@ -32,6 +42,7 @@ function snapshot() {
       lang: store.lang || 'es',
       theme: store.theme || null,
       sounds: store.sounds || { enabled: true, volume: 0.5 },
+      notify: store.notify || { enabled: true },
       onboarded: !!store.onboarded
     },
     overlay: { visible: !!overlayWin?.isVisible(), clickThrough: overlayClickThrough },
@@ -63,6 +74,67 @@ function persist() {
 }
 
 let watcherRetry = null
+
+// ── Notificaciones de Windows ──
+const NOTIF_TEXT = {
+  es: {
+    jackpotBody: (body, sp, v) => [`Premio gordo detectado`, `${body}: posible ${sp} (~${v}M cr)`],
+    bigSample: (sp, v) => [`Muestra legendaria completada`, `${sp} — ${v}M cr a la cartera`],
+    newVariant: (variant) => [`¡Variante nueva para la colección!`, variant],
+    session: (s) => [
+      `Resumen de la sesión`,
+      `${s.jumps} saltos · ${s.samplesCompleted} especies muestreadas · ${Math.round(vaultValue(state) / 1e6)}M cr sin vender`
+    ]
+  },
+  en: {
+    jackpotBody: (body, sp, v) => [`Jackpot detected`, `${body}: possible ${sp} (~${v}M cr)`],
+    bigSample: (sp, v) => [`Legendary sample completed`, `${sp} — ${v}M cr to your wallet`],
+    newVariant: (variant) => [`New variant for your collection!`, variant],
+    session: (s) => [
+      `Session summary`,
+      `${s.jumps} jumps · ${s.samplesCompleted} species sampled · ${Math.round(vaultValue(state) / 1e6)}M cr unsold`
+    ]
+  }
+}
+
+const notifiedBodies = new Set()
+
+function notify(kind, ...args) {
+  if (store.notify?.enabled === false) return
+  try {
+    const [title, body] = (NOTIF_TEXT[store.lang || 'es'] || NOTIF_TEXT.es)[kind](...args)
+    new Notification({ title, body, icon: appIcon(), silent: true }).show()
+  } catch {
+    // sin soporte de notificaciones: silencio
+  }
+}
+
+// Disparadores de notificación sobre eventos en vivo del journal
+function checkNotifications(ev) {
+  if (ev.event === 'ScanOrganic' && ev.ScanType === 'Log' && state.sampling?.isNewVariant) {
+    notify('newVariant', state.sampling.variant || state.sampling.species)
+  }
+  if (ev.event === 'ScanOrganic' && ev.ScanType === 'Analyse') {
+    const last = state.vault[state.vault.length - 1]
+    if (last && last.value >= 15000000) {
+      notify('bigSample', last.species, Math.round(last.value / 1e6))
+    }
+  }
+  if (ev.event === 'SAASignalsFound' || ev.event === 'Scan' || ev.event === 'FSSBodySignals') {
+    for (const [id, b] of Object.entries(state.bioBodies)) {
+      const best = b.predictions?.[0]
+      const hasBio = b.bioCount > 0 || b.genuses.length > 0
+      const key = `${state.system.name}|${id}`
+      if (hasBio && best && best.value >= 15000000 && !notifiedBodies.has(key)) {
+        notifiedBodies.add(key)
+        notify('jackpotBody', b.name, best.species, Math.round(best.value / 1e6))
+      }
+    }
+  }
+  if (ev.event === 'Shutdown' && state.session.jumps + state.session.samplesCompleted > 0) {
+    notify('session', state.session)
+  }
+}
 
 // Parser tolerante de rutas: busca en cualquier JSON (export del Galaxy
 // Plotter de Spansh, resultados de su API, o una lista simple) el primer
@@ -162,6 +234,7 @@ function startWatcher() {
         }
         broadcast()
       }
+      if (live) checkNotifications(ev)
     },
     onStatus: (st) => {
       if (applyStatus(state, st)) broadcast()
@@ -211,9 +284,9 @@ function createMainWindow() {
 function createOverlayWindow() {
   const { width } = screen.getPrimaryDisplay().workAreaSize
   overlayWin = new BrowserWindow({
-    width: 360,
-    height: 520,
-    x: width - 380,
+    width: 296,
+    height: 390,
+    x: width - 314,
     y: 40,
     frame: false,
     transparent: true,
@@ -266,6 +339,7 @@ app.whenReady().then(() => {
     if (patch.theme != null) store.theme = { ...(store.theme || {}), ...patch.theme }
     if (patch.sounds != null)
       store.sounds = { enabled: true, volume: 0.5, ...(store.sounds || {}), ...patch.sounds }
+    if (patch.notify != null) store.notify = { enabled: true, ...(store.notify || {}), ...patch.notify }
     saveStore(store)
     if (dirChanged) {
       state = createGameState(store)

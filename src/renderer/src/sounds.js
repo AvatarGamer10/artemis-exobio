@@ -45,6 +45,12 @@ export function play(kind, volume = 0.5) {
         tone(240, 0, 0.22, v, 'square')
         tone(190, 0.26, 0.3, v, 'square')
         break
+      case 'sparkle':
+        // arpegio rápido y brillante: variante nueva para la colección
+        tone(880, 0, 0.1, v * 0.7, 'triangle')
+        tone(1175, 0.08, 0.1, v * 0.7, 'triangle')
+        tone(1568, 0.16, 0.22, v * 0.8, 'triangle')
+        break
     }
   } catch {
     // sin audio disponible: silencio

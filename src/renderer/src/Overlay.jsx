@@ -34,18 +34,24 @@ export default function Overlay() {
               {t('ovSampling')} — {s.genusLocalised?.toUpperCase()}
             </h3>
             <div className="ov-big" style={{ textAlign: 'center' }}>{s.species}</div>
+            {s.isNewVariant && (
+              <div className="ov-new">
+                <span className="new-badge">✦ {t('ovNewVariant')}</span>
+              </div>
+            )}
             <div className="ov-dial">
               <SamplerDial
                 step={s.step}
                 dist={s.currentDist}
                 range={s.colonyRange}
                 clear={s.clear}
-                size={150}
+                size={122}
               />
             </div>
           </div>
         )}
 
+        {(!s || current) && (
         <div className="ov-section">
           <h3>{current ? current.name?.toUpperCase() : t('ovNoBioBody')}</h3>
           {current ? (
@@ -67,8 +73,9 @@ export default function Overlay() {
             </div>
           )}
         </div>
+        )}
 
-        {bodies.length > 0 && !current && (
+        {bodies.length > 0 && !current && !s && (
           <div className="ov-section">
             <h3>{t('ovBioBodies')}</h3>
             {bodies.map((b) => (

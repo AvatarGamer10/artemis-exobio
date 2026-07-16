@@ -27,6 +27,14 @@ export function useSounds(state) {
       play('clear', v)
     }
 
+    // Primera muestra de una variante que no está en tu colección
+    if (
+      state.sampling?.isNewVariant &&
+      state.sampling.species !== p.sampling?.species
+    ) {
+      play('sparkle', v)
+    }
+
     if (state.session.samplesCompleted > p.session.samplesCompleted) {
       const last = state.vault[state.vault.length - 1]
       play(last && last.value >= 15000000 ? 'jackpot' : 'chime', v)

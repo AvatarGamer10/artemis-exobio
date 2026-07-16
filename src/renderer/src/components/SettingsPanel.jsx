@@ -85,6 +85,19 @@ export default function SettingsPanel({ state, t }) {
           </span>
         </div>
 
+        <label className="hud">{t('setNotify')}</label>
+        <div className="muted" style={{ marginBottom: 10 }}>{t('setNotifyDesc')}</div>
+        <button
+          className={`hud ${state.settings.notify?.enabled !== false ? '' : 'ghost'}`}
+          onClick={() =>
+            window.artemis.setSettings({
+              notify: { enabled: !(state.settings.notify?.enabled !== false) }
+            })
+          }
+        >
+          {t('setNotifyToggle', state.settings.notify?.enabled !== false)}
+        </button>
+
         <label className="hud">{t('setSounds')}</label>
         <div className="muted" style={{ marginBottom: 10 }}>{t('setSoundsDesc')}</div>
         <div style={{ display: 'flex', gap: 12, alignItems: 'center', flexWrap: 'wrap' }}>

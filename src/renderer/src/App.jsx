@@ -8,6 +8,7 @@ import Targets from './components/Targets.jsx'
 import RoutePanel from './components/RoutePanel.jsx'
 import VaultPanel from './components/VaultPanel.jsx'
 import Library from './components/Library.jsx'
+import Collection from './components/Collection.jsx'
 import SessionPanel from './components/SessionPanel.jsx'
 import CmdrPanel from './components/CmdrPanel.jsx'
 import SettingsPanel from './components/SettingsPanel.jsx'
@@ -31,7 +32,8 @@ const TABS = [
   ['objetivos', 'navTargets', IconRadar],
   ['ruta', 'navRoute', IconRoute],
   ['cartera', 'navVault', IconWallet],
-  ['biblioteca', 'navLibrary', IconLeaf],
+  ['coleccion', 'navDex', IconLeaf],
+  ['biblioteca', 'navLibrary', IconChart],
   ['sesion', 'navSession', IconChart],
   ['cmdr', 'navCmdr', IconUser],
   ['ajustes', 'navSettings', IconSettings]
@@ -102,6 +104,7 @@ export default function App() {
           {tab === 'objetivos' && <Targets state={state} t={t} />}
           {tab === 'ruta' && <RoutePanel state={state} t={t} />}
           {tab === 'cartera' && <VaultPanel state={state} t={t} />}
+          {tab === 'coleccion' && <Collection state={state} t={t} lang={lang} />}
           {tab === 'biblioteca' && <Library state={state} t={t} lang={lang} />}
           {tab === 'sesion' && <SessionPanel state={state} t={t} lang={lang} />}
           {tab === 'cmdr' && <CmdrPanel state={state} t={t} lang={lang} />}
