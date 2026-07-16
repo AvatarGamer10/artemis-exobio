@@ -5,6 +5,7 @@ import { JournalWatcher, defaultJournalDir } from './journal.js'
 import { createGameState, applyJournalEvent, applyStatus, vaultValue } from './state.js'
 import { getCommanderProfile } from './inara.js'
 import { edsmSystem, canonnSystemPoi, spanshSearchSpecies } from './apis.js'
+import { checkLatest, downloadAndInstall } from './updater.js'
 import { loadStore, saveStore } from './store.js'
 
 let mainWin = null
@@ -34,7 +35,9 @@ function snapshot() {
     },
     overlay: { visible: !!overlayWin?.isVisible(), clickThrough: overlayClickThrough },
     watcherError: watcher?.lastError || null,
-    external
+    external,
+    update,
+    appVersion: app.getVersion()
   }
 }
 
@@ -58,6 +61,18 @@ function persist() {
 }
 
 let watcherRetry = null
+
+// Estado de auto-actualización (GitHub Releases)
+let update = { available: false, checking: false, downloading: false, progress: 0, error: null }
+
+async function checkForUpdate() {
+  update = { ...update, checking: true }
+  const res = await checkLatest(app.getVersion())
+  update = res.ok
+    ? { ...res, downloading: false, progress: 0, error: null, checking: false }
+    : { available: false, checking: false, downloading: false, progress: 0, error: res.error }
+  broadcast()
+}
 
 // Contexto online del sistema actual (EDSM + Canonn), se refresca en cada salto
 let external = { system: null, loading: false, edsm: null, canonn: null }
@@ -228,6 +243,22 @@ app.whenReady().then(() => {
   ipcMain.handle('targets:search', (_e, species) =>
     spanshSearchSpecies(species, state.system.name || 'Sol')
   )
+  ipcMain.handle('update:download', async () => {
+    if (!update.available || !update.url || update.downloading) return { ok: false }
+    update = { ...update, downloading: true, progress: 0, error: null }
+    broadcast()
+    try {
+      await downloadAndInstall(update.url, update.assetName, (p) => {
+        update = { ...update, progress: p }
+        broadcast()
+      })
+      return { ok: true }
+    } catch (e) {
+      update = { ...update, downloading: false, error: String(e.message || e) }
+      broadcast()
+      return { ok: false, error: update.error }
+    }
+  })
   ipcMain.handle('vault:clear', () => {
     state.vault = []
     persist()
@@ -237,6 +268,7 @@ app.whenReady().then(() => {
   createMainWindow()
   createOverlayWindow()
   startWatcher()
+  setTimeout(checkForUpdate, 4000)
 
   globalShortcut.register('CommandOrControl+Alt+O', toggleOverlay)
   globalShortcut.register('CommandOrControl+Alt+M', toggleClickThrough)

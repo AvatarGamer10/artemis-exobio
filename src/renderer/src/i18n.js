@@ -153,6 +153,12 @@ const dict = {
     presetBio: 'Verde bio',
     presetViolet: 'Violeta',
 
+    updTitle: (v) => `Actualización disponible — v${v}`,
+    updBody: 'Hay una versión nueva de Artemis en GitHub. Se descargará el instalador, se ejecutará y la app se cerrará para actualizarse.',
+    updNow: 'Descargar e instalar',
+    updLater: 'Más tarde',
+    updDownloading: (p) => `Descargando… ${p}%`,
+
     obWelcome: 'Bienvenido a ARTEMIS',
     obChooseLang: 'Elige tu idioma',
     obNext: 'Siguiente',
@@ -329,6 +335,12 @@ const dict = {
     presetIce: 'Ice Blue',
     presetBio: 'Bio Green',
     presetViolet: 'Violet',
+
+    updTitle: (v) => `Update available — v${v}`,
+    updBody: 'A new version of Artemis is on GitHub. The installer will download, run, and the app will close to update itself.',
+    updNow: 'Download and install',
+    updLater: 'Later',
+    updDownloading: (p) => `Downloading… ${p}%`,
 
     obWelcome: 'Welcome to ARTEMIS',
     obChooseLang: 'Choose your language',

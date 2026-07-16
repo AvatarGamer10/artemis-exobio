@@ -11,6 +11,7 @@ import SessionPanel from './components/SessionPanel.jsx'
 import CmdrPanel from './components/CmdrPanel.jsx'
 import SettingsPanel from './components/SettingsPanel.jsx'
 import Onboarding from './components/Onboarding.jsx'
+import UpdateModal from './components/UpdateModal.jsx'
 import {
   IconPlanet,
   IconRadar,
@@ -48,6 +49,7 @@ export default function App() {
   return (
     <div className="app">
       {!state.settings.onboarded && <Onboarding lang={lang} />}
+      {state.settings.onboarded && <UpdateModal update={state.update} t={t} />}
 
       <div className="titlebar">
         <div className="logo">
@@ -87,6 +89,8 @@ export default function App() {
             {t('overlayHint')}: <b>Ctrl+Alt+O</b>
             <br />
             {t('ghostHint')}: <b>Ctrl+Alt+M</b>
+            <br />
+            <span style={{ opacity: 0.7 }}>v{state.appVersion}</span>
           </div>
         </nav>
 

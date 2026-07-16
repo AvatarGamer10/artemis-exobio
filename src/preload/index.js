@@ -14,5 +14,6 @@ contextBridge.exposeInMainWorld('artemis', {
   clearVault: () => ipcRenderer.invoke('vault:clear'),
   minimize: () => ipcRenderer.invoke('win:minimize'),
   close: () => ipcRenderer.invoke('win:close'),
-  searchTargets: (species) => ipcRenderer.invoke('targets:search', species)
+  searchTargets: (species) => ipcRenderer.invoke('targets:search', species),
+  updateDownload: () => ipcRenderer.invoke('update:download')
 })

@@ -4,7 +4,7 @@ App de escritorio (Electron + React) que lee el journal de Elite Dangerous: Odys
 tiempo real y te asiste en todo el flujo de exobiología, con overlay para jugar y
 ventana completa para planificar.
 
-![version](https://img.shields.io/badge/version-0.5.0-orange) ![platform](https://img.shields.io/badge/platform-Windows-blue)
+![version](https://img.shields.io/badge/version-0.6.0-orange) ![platform](https://img.shields.io/badge/platform-Windows-blue)
 
 ## Características
 
@@ -33,6 +33,9 @@ ventana completa para planificar.
 Descarga `Artemis-Setup-<versión>.exe` desde
 [Releases](https://github.com/AvatarGamer10/artemis-exobio/releases) y ejecútalo.
 Instalación de un clic; no requiere Node.
+
+La app comprueba al arrancar si hay una versión nueva en Releases y ofrece
+descargarla e instalarla automáticamente.
 
 ## Desarrollo
 

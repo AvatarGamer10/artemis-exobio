@@ -107,6 +107,17 @@ const DEMO_STATE = {
   },
   overlay: { visible: true, clickThrough: false },
   watcherError: null,
+  appVersion: '0.6.0',
+  // con ?update en la URL se previsualiza el aviso de actualización
+  update: {
+    available: window.location.search.includes('update'),
+    version: '9.9.9',
+    notes: '- Novedades de ejemplo\n- Otra mejora',
+    size: 82385128,
+    downloading: false,
+    progress: 0,
+    error: null
+  },
   external: {
     system: 'Prestige BIO-1',
     loading: false,
