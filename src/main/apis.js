@@ -47,6 +47,40 @@ export async function canonnSystemPoi(systemName, cmdrName) {
   }
 }
 
+// Spansh: ploteo de ruta (galaxy/neutron plotter). Devuelve la lista de saltos.
+export async function spanshPlotRoute(from, to, range, efficiency = 60) {
+  try {
+    const q = new URLSearchParams({
+      efficiency: String(efficiency),
+      range: String(range),
+      from,
+      to
+    }).toString()
+    const start = await getJson(`https://spansh.co.uk/api/route?${q}`, { method: 'POST' }, 30000)
+    if (!start?.job) return { ok: false, error: start?.error || 'Spansh no devolvió un job' }
+    for (let i = 0; i < 24; i++) {
+      await new Promise((r) => setTimeout(r, 2500))
+      const res = await getJson(`https://spansh.co.uk/api/results/${start.job}`, {}, 30000)
+      if (res?.status === 'ok') {
+        const jumps = res.result?.system_jumps || []
+        if (!jumps.length) return { ok: false, error: 'Ruta vacía' }
+        return {
+          ok: true,
+          systems: jumps.map((j) => ({
+            system: j.system,
+            neutron: !!j.neutron_star,
+            dist: j.distance_jumped != null ? Math.round(j.distance_jumped * 10) / 10 : null
+          }))
+        }
+      }
+      if (res?.error) return { ok: false, error: res.error }
+    }
+    return { ok: false, error: 'Spansh tardó demasiado — inténtalo de nuevo' }
+  } catch (e) {
+    return { ok: false, error: String(e.message || e) }
+  }
+}
+
 // Spansh: cuerpos con una especie concreta cerca de un sistema de referencia
 export async function spanshSearchSpecies(species, referenceSystem, size = 15) {
   try {

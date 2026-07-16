@@ -5,6 +5,7 @@ import { useTheme } from './theme.js'
 import { useSounds } from './useSounds.js'
 import SystemPanel from './components/SystemPanel.jsx'
 import Targets from './components/Targets.jsx'
+import RoutePanel from './components/RoutePanel.jsx'
 import VaultPanel from './components/VaultPanel.jsx'
 import Library from './components/Library.jsx'
 import SessionPanel from './components/SessionPanel.jsx'
@@ -15,6 +16,7 @@ import UpdateModal from './components/UpdateModal.jsx'
 import {
   IconPlanet,
   IconRadar,
+  IconRoute,
   IconWallet,
   IconChart,
   IconUser,
@@ -27,6 +29,7 @@ import {
 const TABS = [
   ['sistema', 'navSystem', IconPlanet],
   ['objetivos', 'navTargets', IconRadar],
+  ['ruta', 'navRoute', IconRoute],
   ['cartera', 'navVault', IconWallet],
   ['biblioteca', 'navLibrary', IconLeaf],
   ['sesion', 'navSession', IconChart],
@@ -97,6 +100,7 @@ export default function App() {
         <div className="content">
           {tab === 'sistema' && <SystemPanel state={state} t={t} />}
           {tab === 'objetivos' && <Targets state={state} t={t} />}
+          {tab === 'ruta' && <RoutePanel state={state} t={t} />}
           {tab === 'cartera' && <VaultPanel state={state} t={t} />}
           {tab === 'biblioteca' && <Library state={state} t={t} lang={lang} />}
           {tab === 'sesion' && <SessionPanel state={state} t={t} lang={lang} />}

@@ -88,6 +88,24 @@ export default function Overlay() {
           </div>
         )}
 
+        {state.route?.systems?.length > 0 && state.route.index + 1 < state.route.systems.length && (
+          <div className="ov-section">
+            <h3>
+              {t('ovRoute')} · {state.route.systems.length - 1 - state.route.index} ↷
+            </h3>
+            <div className="genus-row">
+              <span className="pending" style={{ fontFamily: 'var(--mono)', fontStyle: 'normal', fontSize: 12 }}>
+                {t('ovNext')}
+              </span>
+              <span className="leader" />
+              <span className="range">
+                {state.route.systems[state.route.index + 1].system}
+                {state.route.systems[state.route.index + 1].neutron ? ' ⚡' : ''}
+              </span>
+            </div>
+          </div>
+        )}
+
         {state.status.lowFuel && <div className="warn">{t('sysLowFuel')}</div>}
       </div>
       <div className="ov-footer">

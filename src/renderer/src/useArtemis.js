@@ -107,7 +107,19 @@ const DEMO_STATE = {
   },
   overlay: { visible: true, clickThrough: false },
   watcherError: null,
-  appVersion: '0.6.0',
+  appVersion: '0.7.0',
+  ship: { type: 'Krait Phantom', name: 'Perseverance', ident: 'MAY-01', maxJumpRange: 68.42, cargo: 32 },
+  route: {
+    dest: 'Colonia',
+    index: 1,
+    source: 'spansh',
+    systems: [
+      { system: 'Prestige BIO-1', neutron: false, dist: 0 },
+      { system: 'Synuefe XR-H d11-102', neutron: false, dist: 61.3 },
+      { system: 'Praea Euq HW-W d1-52', neutron: true, dist: 268.9 },
+      { system: 'Colonia', neutron: false, dist: 65.2 }
+    ]
+  },
   // con ?update en la URL se previsualiza el aviso de actualización
   update: {
     available: window.location.search.includes('update'),

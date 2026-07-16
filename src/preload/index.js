@@ -15,5 +15,9 @@ contextBridge.exposeInMainWorld('artemis', {
   minimize: () => ipcRenderer.invoke('win:minimize'),
   close: () => ipcRenderer.invoke('win:close'),
   searchTargets: (species) => ipcRenderer.invoke('targets:search', species),
-  updateDownload: () => ipcRenderer.invoke('update:download')
+  updateDownload: () => ipcRenderer.invoke('update:download'),
+  plotRoute: (opts) => ipcRenderer.invoke('route:plot', opts),
+  importRoute: () => ipcRenderer.invoke('route:import'),
+  clearRoute: () => ipcRenderer.invoke('route:clear'),
+  getSlef: () => ipcRenderer.invoke('ship:slef')
 })

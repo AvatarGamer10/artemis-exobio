@@ -4,7 +4,7 @@ App de escritorio (Electron + React) que lee el journal de Elite Dangerous: Odys
 tiempo real y te asiste en todo el flujo de exobiología, con overlay para jugar y
 ventana completa para planificar.
 
-![version](https://img.shields.io/badge/version-0.6.0-orange) ![platform](https://img.shields.io/badge/platform-Windows-blue)
+![version](https://img.shields.io/badge/version-0.7.0-orange) ![platform](https://img.shields.io/badge/platform-Windows-blue)
 
 ## Características
 
@@ -17,6 +17,9 @@ ventana completa para planificar.
   (bio ya reportada por la comunidad) en cada salto.
 - **Objetivos**: buscador Spansh de cuerpos con especies premium (≥9M cr) cerca de tu
   posición, con botón para copiar el sistema y plotear.
+- **Ruta**: plotea con Spansh desde tu sistema actual usando el rango real de tu nave
+  (leído del journal), copia tu build en SLEF para el Galaxy Plotter, importa rutas
+  en JSON, y sigue el progreso en vivo (ventana + overlay) con cada salto.
 - **Asistente de muestreo**: dial radial estilo Genetic Sampler con la distancia de
   colonia en vivo desde Status.json, y aviso visual y sonoro al salir del radio.
 - **Cartera**: valor sin vender, aviso de pérdida al morir, estimación de first logged (x5).

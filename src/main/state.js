@@ -23,6 +23,10 @@ export function createGameState(persisted = {}) {
     vault: persisted.vault || [], // { id, species, variant, genus, body, system, value, maybeFirstLogged, timestamp }
     // Biblioteca: registro permanente de todo lo muestreado (no se vacía al vender)
     library: persisted.library || [],
+    // Nave actual (del evento Loadout) y ruta activa (Spansh o importada)
+    ship: null,
+    shipRaw: null, // Loadout completo para exportar como SLEF; se excluye del snapshot
+    route: persisted.route || null, // { systems: [{system, neutron, dist}], index, dest }
     session: {
       startedAt: new Date().toISOString(),
       jumps: 0,
@@ -81,7 +85,25 @@ export function applyJournalEvent(state, ev, { live } = { live: true }) {
       state.system.name = ev.StarSystem
       return true
 
+    case 'Loadout':
+      state.ship = {
+        type: ev.Ship_Localised || ev.Ship || null,
+        name: ev.ShipName || null,
+        ident: ev.ShipIdent || null,
+        maxJumpRange: ev.MaxJumpRange != null ? +ev.MaxJumpRange.toFixed(2) : null,
+        cargo: ev.CargoCapacity ?? null
+      }
+      state.shipRaw = ev
+      return true
+
     case 'FSDJump':
+      // Seguimiento de ruta: al llegar a un waypoint, avanza el índice
+      if (state.route?.systems) {
+        const i = state.route.systems.findIndex(
+          (s) => s.system.toLowerCase() === (ev.StarSystem || '').toLowerCase()
+        )
+        if (i >= 0) state.route.index = Math.max(state.route.index, i)
+      }
       state.system = { name: ev.StarSystem, bodyCount: null, scanned: 0, allBodiesFound: false }
       state.systemBodies = {}
       state.bioBodies = {}

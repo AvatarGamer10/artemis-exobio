@@ -1,10 +1,10 @@
-import { app, BrowserWindow, ipcMain, globalShortcut, screen, shell, nativeImage } from 'electron'
+import { app, BrowserWindow, dialog, ipcMain, globalShortcut, screen, shell, nativeImage } from 'electron'
 import fs from 'node:fs'
 import path from 'node:path'
 import { JournalWatcher, defaultJournalDir } from './journal.js'
 import { createGameState, applyJournalEvent, applyStatus, vaultValue } from './state.js'
 import { getCommanderProfile } from './inara.js'
-import { edsmSystem, canonnSystemPoi, spanshSearchSpecies } from './apis.js'
+import { edsmSystem, canonnSystemPoi, spanshSearchSpecies, spanshPlotRoute } from './apis.js'
 import { checkLatest, downloadAndInstall } from './updater.js'
 import { loadStore, saveStore } from './store.js'
 
@@ -22,6 +22,7 @@ const preloadPath = path.join(__dirname, '../preload/index.js')
 function snapshot() {
   return {
     ...state,
+    shipRaw: undefined, // demasiado grande para difundirlo; se exporta vía ship:slef
     vaultTotal: vaultValue(state),
     settings: {
       journalDir: store.journalDir || defaultJournalDir(),
@@ -56,11 +57,55 @@ function broadcast() {
 function persist() {
   store.vault = state.vault
   store.library = state.library
+  store.route = state.route
   store.cmdrName = state.commander.name || store.cmdrName
   saveStore(store)
 }
 
 let watcherRetry = null
+
+// Parser tolerante de rutas: busca en cualquier JSON (export del Galaxy
+// Plotter de Spansh, resultados de su API, o una lista simple) el primer
+// array de sistemas reconocible.
+function extractRouteSystems(node, depth = 0) {
+  if (depth > 6) return null
+  if (Array.isArray(node)) {
+    if (node.length >= 2 && node.every((x) => typeof x === 'string')) {
+      return node.map((s) => ({ system: s, neutron: false, dist: null }))
+    }
+    const mapped = node
+      .filter((x) => x && typeof x === 'object')
+      .map((x) => {
+        const name = x.system || x.name || x.star_system || x.System || x.StarSystem
+        return name
+          ? {
+              system: String(name),
+              neutron: !!(x.neutron_star ?? x.neutron ?? x.has_neutron),
+              dist:
+                x.distance_jumped != null
+                  ? Math.round(x.distance_jumped * 10) / 10
+                  : x.distance != null
+                    ? Math.round(x.distance * 10) / 10
+                    : null
+            }
+          : null
+      })
+      .filter(Boolean)
+    if (mapped.length >= 2) return mapped
+    for (const item of node) {
+      const r = extractRouteSystems(item, depth + 1)
+      if (r) return r
+    }
+    return null
+  }
+  if (node && typeof node === 'object') {
+    for (const v of Object.values(node)) {
+      const r = extractRouteSystems(v, depth + 1)
+      if (r) return r
+    }
+  }
+  return null
+}
 
 // Estado de auto-actualización (GitHub Releases)
 let update = { available: false, checking: false, downloading: false, progress: 0, error: null }
@@ -113,6 +158,7 @@ function startWatcher() {
         }
         if (ev.event === 'FSDJump' || ev.event === 'Location') {
           fetchExternal(state.system.name)
+          if (ev.event === 'FSDJump' && state.route) persist()
         }
         broadcast()
       }
@@ -243,6 +289,57 @@ app.whenReady().then(() => {
   ipcMain.handle('targets:search', (_e, species) =>
     spanshSearchSpecies(species, state.system.name || 'Sol')
   )
+  // ── Sistema de rutas (ROUTE update) ──
+  ipcMain.handle('route:plot', async (_e, { to, range, efficiency }) => {
+    const from = state.system.name
+    const r = range || state.ship?.maxJumpRange
+    if (!from) return { ok: false, error: 'no-system' }
+    if (!r) return { ok: false, error: 'no-range' }
+    const res = await spanshPlotRoute(from, to, r, efficiency || 60)
+    if (res.ok) {
+      state.route = { systems: res.systems, index: 0, dest: to, source: 'spansh' }
+      persist()
+      broadcast()
+    }
+    return res
+  })
+  ipcMain.handle('route:import', async () => {
+    const pick = await dialog.showOpenDialog(mainWin, {
+      title: 'Importar ruta (JSON del Galaxy Plotter de Spansh)',
+      filters: [{ name: 'JSON', extensions: ['json'] }],
+      properties: ['openFile']
+    })
+    if (pick.canceled || !pick.filePaths[0]) return { ok: false, error: 'cancelled' }
+    try {
+      const text = fs.readFileSync(pick.filePaths[0], 'utf8')
+      const raw = JSON.parse(text.charCodeAt(0) === 0xfeff ? text.slice(1) : text)
+      const systems = extractRouteSystems(raw)
+      if (!systems) return { ok: false, error: 'no-systems' }
+      state.route = {
+        systems,
+        index: 0,
+        dest: systems[systems.length - 1].system,
+        source: 'import'
+      }
+      persist()
+      broadcast()
+      return { ok: true, count: systems.length }
+    } catch (e) {
+      return { ok: false, error: String(e.message || e) }
+    }
+  })
+  ipcMain.handle('route:clear', () => {
+    state.route = null
+    persist()
+    broadcast()
+  })
+  ipcMain.handle('ship:slef', () => {
+    if (!state.shipRaw) return null
+    return JSON.stringify([
+      { header: { appName: 'Artemis', appVersion: app.getVersion() }, data: state.shipRaw }
+    ])
+  })
+
   ipcMain.handle('update:download', async () => {
     if (!update.available || !update.url || update.downloading) return { ok: false }
     update = { ...update, downloading: true, progress: 0, error: null }
