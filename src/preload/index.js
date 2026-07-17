@@ -20,5 +20,8 @@ contextBridge.exposeInMainWorld('artemis', {
   importRoute: () => ipcRenderer.invoke('route:import'),
   clearRoute: () => ipcRenderer.invoke('route:clear'),
   getSlef: () => ipcRenderer.invoke('ship:slef'),
-  discordTest: () => ipcRenderer.invoke('discord:test')
+  discordTest: () => ipcRenderer.invoke('discord:test'),
+  backupExport: () => ipcRenderer.invoke('backup:export'),
+  backupImport: () => ipcRenderer.invoke('backup:import'),
+  exportCsv: () => ipcRenderer.invoke('library:csv')
 })

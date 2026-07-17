@@ -4,7 +4,7 @@ App de escritorio (Electron + React) que lee el journal de Elite Dangerous: Odys
 tiempo real y te asiste en todo el flujo de exobiología, con overlay para jugar y
 ventana completa para planificar.
 
-![version](https://img.shields.io/badge/version-0.9.0-orange) ![platform](https://img.shields.io/badge/platform-Windows-blue)
+![version](https://img.shields.io/badge/version-0.10.0-orange) ![platform](https://img.shields.io/badge/platform-Windows-blue)
 
 ## Características
 
@@ -30,7 +30,13 @@ ventana completa para planificar.
 - **Colección**: pokédex de flora — todas las especies del catálogo con rareza
   (glow común → legendaria), cada variante de color coleccionada con fecha y lugar,
   y aviso en el HUD (efecto + sonido) al escanear una variante que no tienes.
-- **Biblioteca**: registro permanente y buscable de todo lo muestreado.
+- **Biblioteca**: registro permanente y buscable de todo lo muestreado, con export a
+  CSV y first logged confirmados al vender (✪).
+- **Estadísticas**: créditos por día (30 días), % de colección por género, récords
+  (mejor día, especie top, first logged confirmados, total acumulado).
+- **Bandeja del sistema**: minimizar esconde a la bandeja; menú rápido con overlay y salir.
+- **Copia de seguridad**: exporta/importa tu colección completa (la importación
+  fusiona sin perder nada).
 - **Notificaciones de Windows**: premio gordo detectado, muestra legendaria, variante
   nueva y resumen al cerrar sesión (desactivables).
 - **Alertas sonoras**: muestra completada, fanfarria de premio gordo (≥15M), radio de

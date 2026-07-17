@@ -1,11 +1,20 @@
 import React, { useMemo, useState } from 'react'
 import { cr } from '../useArtemis.js'
-import { IconLeaf, IconChart } from '../Icons.jsx'
+import { IconLeaf, IconChart, IconSave } from '../Icons.jsx'
 
 const MAX_ROWS = 200
 
 export default function Library({ state, t, lang }) {
   const [query, setQuery] = useState('')
+  const [csvMsg, setCsvMsg] = useState(null)
+
+  const exportCsv = async () => {
+    const r = await window.artemis.exportCsv()
+    if (r?.ok) {
+      setCsvMsg(t('libCsvOk', r.count))
+      setTimeout(() => setCsvMsg(null), 3000)
+    }
+  }
   const locale = lang === 'en' ? 'en-GB' : 'es-ES'
   const library = state.library || []
 
@@ -77,8 +86,11 @@ export default function Library({ state, t, lang }) {
                 </thead>
                 <tbody>
                   {filtered.slice(0, MAX_ROWS).map((e) => (
-                    <tr key={e.id} className={e.maybeFirstLogged ? 'first' : ''}>
-                      <td><span className="species">{e.species}</span>{e.maybeFirstLogged ? ' ★' : ''}</td>
+                    <tr key={e.id} className={e.maybeFirstLogged || e.firstLoggedConfirmed ? 'first' : ''}>
+                      <td>
+                        <span className="species">{e.species}</span>
+                        {e.firstLoggedConfirmed === true ? ' ✪' : e.maybeFirstLogged ? ' ★' : ''}
+                      </td>
                       <td>{e.variant || '—'}</td>
                       <td>{e.system || '—'}</td>
                       <td>{e.body || '—'}</td>
@@ -94,6 +106,13 @@ export default function Library({ state, t, lang }) {
                 {t('libTruncated', MAX_ROWS, filtered.length)}
               </div>
             )}
+            <div style={{ marginTop: 14, display: 'flex', gap: 12, alignItems: 'center', flexWrap: 'wrap' }}>
+              <button className="hud ghost" onClick={exportCsv}>
+                <IconSave size={16} /> {t('libCsv')}
+              </button>
+              {csvMsg && <span className="v good">{csvMsg}</span>}
+              <span className="muted">{t('libFirstNote')}</span>
+            </div>
           </>
         )}
       </div>

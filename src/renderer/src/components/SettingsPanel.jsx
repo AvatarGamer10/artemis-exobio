@@ -20,6 +20,7 @@ export default function SettingsPanel({ state, t }) {
   const [webhook, setWebhook] = useState(state.settings.discord?.webhook || '')
   const [saved, setSaved] = useState(false)
   const [dcTest, setDcTest] = useState(null)
+  const [bkMsg, setBkMsg] = useState(null)
 
   const theme = { ...DEFAULT_THEME, ...(state.settings.theme || {}) }
   const sounds = { enabled: true, volume: 0.5, ...(state.settings.sounds || {}) }
@@ -172,6 +173,37 @@ export default function SettingsPanel({ state, t }) {
             <IconSave size={17} /> {t('setSave')}
           </button>
           {saved && <span className="v good">{t('setSaved')}</span>}
+        </div>
+      </div>
+
+      <div className="panel">
+        <h2>
+          <IconSave size={16} /> {t('setBackup')}
+        </h2>
+        <div className="muted" style={{ marginBottom: 12 }}>{t('setBackupDesc')}</div>
+        <div style={{ display: 'flex', gap: 12, alignItems: 'center', flexWrap: 'wrap' }}>
+          <button
+            className="hud"
+            onClick={async () => {
+              const r = await window.artemis.backupExport()
+              setBkMsg(r?.ok ? t('setBackupOk') : null)
+              setTimeout(() => setBkMsg(null), 3000)
+            }}
+          >
+            <IconSave size={16} /> {t('setBackupExport')}
+          </button>
+          <button
+            className="hud ghost"
+            onClick={async () => {
+              const r = await window.artemis.backupImport()
+              if (r?.ok) setBkMsg(t('setBackupImported', r.library))
+              else if (r?.error && r.error !== 'cancelled') setBkMsg(t('setBackupErr'))
+              setTimeout(() => setBkMsg(null), 4000)
+            }}
+          >
+            <IconFolder size={16} /> {t('setBackupImport')}
+          </button>
+          {bkMsg && <span className="v good">{bkMsg}</span>}
         </div>
       </div>
 

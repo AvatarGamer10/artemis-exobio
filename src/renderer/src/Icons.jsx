@@ -151,6 +151,14 @@ export const IconWalk = (p) => (
   </I>
 )
 
+export const IconGraph = (p) => (
+  <I {...p}>
+    <path d="M3 4v16h18" />
+    <path d="M6 15l4-5 3.5 3L19 6" />
+    <circle cx="19" cy="6" r="1.4" fill="currentColor" stroke="none" />
+  </I>
+)
+
 export const IconRoute = (p) => (
   <I {...p}>
     <circle cx="6" cy="19" r="2.5" />

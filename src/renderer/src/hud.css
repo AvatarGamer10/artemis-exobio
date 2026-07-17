@@ -281,6 +281,25 @@ td .species, tr td:first-child { font-size: 13px; }
 .dial .pip.done { fill: var(--accent); stroke: var(--accent); }
 .dial-info { flex: 1; min-width: 220px; }
 
+/* ── Gráficas (Estadísticas) ── */
+.chart { display: block; }
+.chart .grid { stroke: var(--card-line); stroke-width: 1; }
+.chart .grid.faint { stroke: var(--hairline); stroke-dasharray: 3 4; }
+.chart .dbar { fill: var(--accent); }
+.chart .dbar:hover { fill: var(--hi); }
+.chart .axis-label { fill: var(--ink-dim); font-family: var(--mono); font-size: 10px; }
+.chart .peak-label { fill: var(--ink); font-family: var(--mono); font-size: 10.5px; }
+
+.grow { display: flex; align-items: center; gap: 12px; padding: 5px 0; }
+.grow-name {
+  width: 110px; flex: none;
+  font-family: var(--serif); font-style: italic; font-size: 13.5px;
+  color: var(--ink); display: inline-flex; align-items: center; gap: 5px;
+}
+.grow-name svg { color: var(--good); }
+.grow-bar { flex: 1; margin: 0; }
+.grow-count { width: 46px; flex: none; text-align: right; font-family: var(--mono); font-size: 11.5px; color: var(--ink-dim); }
+
 /* ── Mini-mapa de superficie (migas de pan) ── */
 .smap { display: block; margin: 0 auto; }
 .smap .compass { fill: none; stroke: var(--hairline); }

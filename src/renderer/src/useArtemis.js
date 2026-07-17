@@ -73,36 +73,25 @@ const DEMO_STATE = {
     }
   ],
   vaultTotal: 95054000,
-  library: [
-    {
-      id: 'L1',
-      species: 'Stratum Tectonicas',
-      variant: 'Stratum Tectonicas - Verde',
-      genus: 'Stratum',
-      system: 'Prestige BIO-1',
-      body: 'Prestige BIO-1 c 3',
-      value: 19010800,
-      maybeFirstLogged: true,
-      timestamp: '2026-07-10T18:00:00Z'
-    },
-    {
-      id: 'L2',
-      species: 'Fungoida Setisis',
-      variant: 'Fungoida Setisis - Ámbar',
-      genus: 'Fungoida',
-      system: 'Synuefe XR-H d11-102',
-      body: 'C 2',
-      value: 1670100,
-      maybeFirstLogged: false,
-      timestamp: '2026-07-08T21:30:00Z'
-    }
-  ],
+  library: (() => {
+    const day = (n) => new Date(Date.now() - n * 86400000).toISOString()
+    return [
+      { id: 'L1', species: 'Stratum Tectonicas', variant: 'Stratum Tectonicas - Verde', genus: 'Stratum', system: 'Prestige BIO-1', body: 'Prestige BIO-1 c 3', value: 19010800, maybeFirstLogged: true, firstLoggedConfirmed: true, timestamp: day(2) },
+      { id: 'L2', species: 'Fungoida Setisis', variant: 'Fungoida Setisis - Ámbar', genus: 'Fungoida', system: 'Synuefe XR-H d11-102', body: 'C 2', value: 1670100, maybeFirstLogged: false, timestamp: day(6) },
+      { id: 'L3', species: 'Bacterium Alcyoneum', variant: 'Bacterium Alcyoneum - Teal', genus: 'Bacterium', system: 'Synuefe XR-H d11-102', body: 'C 2', value: 1658500, timestamp: day(6) },
+      { id: 'L4', species: 'Concha Aureolas', variant: 'Concha Aureolas - Índigo', genus: 'Concha', system: 'HIP 23759', body: '4 a', value: 7774700, maybeFirstLogged: true, timestamp: day(11) },
+      { id: 'L5', species: 'Osseus Discus', variant: 'Osseus Discus - Turquesa', genus: 'Osseus', system: 'HIP 23759', body: '4 b', value: 12934900, timestamp: day(11) },
+      { id: 'L6', species: 'Tussock Stigmasis', variant: 'Tussock Stigmasis - Rojo', genus: 'Tussock', system: 'Praea Euq HW-W d1-52', body: 'A 2', value: 19010800, firstLoggedConfirmed: false, timestamp: day(19) },
+      { id: 'L7', species: 'Fonticulua Segmentatus', variant: 'Fonticulua Segmentatus - Zafiro', genus: 'Fonticulua', system: 'Praea Euq HW-W d1-52', body: 'A 5', value: 19010800, maybeFirstLogged: true, timestamp: day(26) }
+    ]
+  })(),
   session: {
-    startedAt: new Date().toISOString(),
+    startedAt: new Date(Date.now() - 2.4 * 3600000).toISOString(),
     jumps: 14,
     distanceLy: 512.4,
     bioBodiesVisited: 3,
     samplesCompleted: 5,
+    valueSampled: 38500000,
     creditsEarned: 42000000
   },
   status: {

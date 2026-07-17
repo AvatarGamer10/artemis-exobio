@@ -36,6 +36,19 @@ export default function SessionPanel({ state, t, lang }) {
             <div className="n">{cr(state.vaultTotal)}</div>
             <div className="l">{t('sessPending')}</div>
           </div>
+          <div className="stat">
+            <div className="n">{cr(s.valueSampled || 0)}</div>
+            <div className="l">{t('sessValueSampled')}</div>
+          </div>
+          <div className="stat">
+            <div className="n">
+              {(() => {
+                const hours = Math.max(0.05, (Date.now() - new Date(s.startedAt).getTime()) / 3600000)
+                return s.valueSampled ? Math.round((s.valueSampled || 0) / hours / 1e6 * 10) / 10 + 'M' : '—'
+              })()}
+            </div>
+            <div className="l">{t('sessPerHour')}</div>
+          </div>
         </div>
       </div>
       {state.codexNew.length > 0 && (

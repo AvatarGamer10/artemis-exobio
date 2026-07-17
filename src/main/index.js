@@ -4,10 +4,12 @@ import {
   dialog,
   ipcMain,
   globalShortcut,
+  Menu,
   screen,
   shell,
   nativeImage,
-  Notification
+  Notification,
+  Tray
 } from 'electron'
 import fs from 'node:fs'
 import path from 'node:path'
@@ -26,6 +28,7 @@ let store = {}
 let state = null
 let overlayClickThrough = false
 let broadcastTimer = null
+let tray = null
 
 const isDev = !!process.env['ELECTRON_RENDERER_URL']
 const preloadPath = path.join(__dirname, '../preload/index.js')
@@ -348,6 +351,40 @@ function createOverlayWindow() {
   overlayWin.on('closed', () => (overlayWin = null))
 }
 
+// ── Bandeja del sistema ──
+const TRAY_TEXT = {
+  es: { show: 'Mostrar Artemis', overlay: 'Mostrar / ocultar overlay', quit: 'Salir' },
+  en: { show: 'Show Artemis', overlay: 'Show / hide overlay', quit: 'Quit' }
+}
+
+function showMain() {
+  if (!mainWin || mainWin.isDestroyed()) return
+  mainWin.show()
+  mainWin.focus()
+}
+
+function buildTrayMenu() {
+  if (!tray) return
+  const txt = TRAY_TEXT[store.lang || 'es'] || TRAY_TEXT.es
+  tray.setContextMenu(
+    Menu.buildFromTemplate([
+      { label: txt.show, click: showMain },
+      { label: txt.overlay, click: toggleOverlay },
+      { type: 'separator' },
+      { label: txt.quit, click: () => app.quit() }
+    ])
+  )
+}
+
+function createTray() {
+  const icon = appIcon()
+  if (!icon) return
+  tray = new Tray(icon.resize({ width: 16, height: 16 }))
+  tray.setToolTip('ARTEMIS — Compañero de Exobiología')
+  buildTrayMenu()
+  tray.on('double-click', showMain)
+}
+
 function toggleOverlay() {
   if (!overlayWin || overlayWin.isDestroyed()) {
     createOverlayWindow()
@@ -378,7 +415,10 @@ app.whenReady().then(() => {
       store.inaraKey = patch.inaraKey
     }
     if (patch.cmdrName != null) store.cmdrName = patch.cmdrName
-    if (patch.lang != null) store.lang = patch.lang
+    if (patch.lang != null) {
+      store.lang = patch.lang
+      buildTrayMenu()
+    }
     if (patch.onboarded != null) store.onboarded = patch.onboarded
     if (patch.theme != null) store.theme = { ...(store.theme || {}), ...patch.theme }
     if (patch.sounds != null)
@@ -410,7 +450,8 @@ app.whenReady().then(() => {
   })
   ipcMain.handle('overlay:toggle', () => toggleOverlay())
   ipcMain.handle('overlay:clickthrough', () => toggleClickThrough())
-  ipcMain.handle('win:minimize', () => mainWin?.minimize())
+  // Minimizar = esconder a la bandeja (no ocupa la barra de tareas mientras juegas)
+  ipcMain.handle('win:minimize', () => mainWin?.hide())
   ipcMain.handle('win:close', () => mainWin?.close())
   ipcMain.handle('targets:search', (_e, species) =>
     spanshSearchSpecies(species, state.system.name || 'Sol')
@@ -482,6 +523,90 @@ app.whenReady().then(() => {
       return { ok: false, error: update.error }
     }
   })
+  // ── Copia de seguridad y exportación ──
+  ipcMain.handle('backup:export', async () => {
+    const stamp = new Date().toISOString().slice(0, 10)
+    const pick = await dialog.showSaveDialog(mainWin, {
+      title: 'Exportar copia de seguridad',
+      defaultPath: `artemis-backup-${stamp}.json`,
+      filters: [{ name: 'JSON', extensions: ['json'] }]
+    })
+    if (pick.canceled || !pick.filePath) return { ok: false, error: 'cancelled' }
+    try {
+      persist()
+      fs.writeFileSync(pick.filePath, JSON.stringify(store, null, 2), 'utf8')
+      return { ok: true }
+    } catch (e) {
+      return { ok: false, error: String(e.message || e) }
+    }
+  })
+  ipcMain.handle('backup:import', async () => {
+    const pick = await dialog.showOpenDialog(mainWin, {
+      title: 'Importar copia de seguridad de Artemis',
+      filters: [{ name: 'JSON', extensions: ['json'] }],
+      properties: ['openFile']
+    })
+    if (pick.canceled || !pick.filePaths[0]) return { ok: false, error: 'cancelled' }
+    try {
+      const text = fs.readFileSync(pick.filePaths[0], 'utf8')
+      const imp = JSON.parse(text.charCodeAt(0) === 0xfeff ? text.slice(1) : text)
+      if (!imp || typeof imp !== 'object' || (!imp.library && !imp.vault)) {
+        return { ok: false, error: 'invalid' }
+      }
+      // Unión por id: nunca se pierde nada de lo que ya hay en esta máquina
+      const mergeById = (a = [], b = []) => {
+        const m = new Map()
+        for (const x of [...a, ...b]) if (x && x.id) m.set(x.id, x)
+        return [...m.values()].sort((x, y) =>
+          String(x.timestamp || '').localeCompare(String(y.timestamp || ''))
+        )
+      }
+      store.library = mergeById(store.library, imp.library)
+      store.vault = mergeById(store.vault, imp.vault)
+      // Ajustes del backup solo rellenan huecos, no pisan los actuales
+      for (const k of ['cmdrName', 'inaraKey', 'lang', 'theme', 'sounds', 'notify', 'discord', 'route']) {
+        if (imp[k] != null && store[k] == null) store[k] = imp[k]
+      }
+      saveStore(store)
+      state = createGameState(store)
+      startWatcher()
+      broadcast()
+      return { ok: true, library: store.library.length }
+    } catch (e) {
+      return { ok: false, error: String(e.message || e) }
+    }
+  })
+  ipcMain.handle('library:csv', async () => {
+    const stamp = new Date().toISOString().slice(0, 10)
+    const pick = await dialog.showSaveDialog(mainWin, {
+      title: 'Exportar biblioteca a CSV',
+      defaultPath: `artemis-biblioteca-${stamp}.csv`,
+      filters: [{ name: 'CSV', extensions: ['csv'] }]
+    })
+    if (pick.canceled || !pick.filePath) return { ok: false, error: 'cancelled' }
+    try {
+      const esc = (v) => `"${String(v ?? '').replace(/"/g, '""')}"`
+      const rows = [
+        ['species', 'variant', 'genus', 'system', 'body', 'value_cr', 'timestamp', 'first_logged'],
+        ...state.library.map((l) => [
+          l.species,
+          l.variant || '',
+          l.genus || '',
+          l.system || '',
+          l.body || '',
+          l.value ?? '',
+          l.timestamp || '',
+          l.firstLoggedConfirmed === true ? 'confirmed' : l.maybeFirstLogged ? 'estimated' : ''
+        ])
+      ]
+      // BOM para que Excel abra el UTF-8 bien; ';' como separador (Excel ES)
+      fs.writeFileSync(pick.filePath, '﻿' + rows.map((r) => r.map(esc).join(';')).join('\r\n'), 'utf8')
+      return { ok: true, count: state.library.length }
+    } catch (e) {
+      return { ok: false, error: String(e.message || e) }
+    }
+  })
+
   ipcMain.handle('discord:test', async () => {
     if (!store.discord?.webhook) return { ok: false, error: 'no-webhook' }
     return postDiscord(
@@ -497,6 +622,7 @@ app.whenReady().then(() => {
 
   createMainWindow()
   createOverlayWindow()
+  createTray()
   startWatcher()
   setTimeout(checkForUpdate, 4000)
 

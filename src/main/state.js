@@ -35,6 +35,7 @@ export function createGameState(persisted = {}) {
       distanceLy: 0,
       bioBodiesVisited: 0,
       samplesCompleted: 0,
+      valueSampled: 0,
       creditsEarned: 0
     },
     status: { lat: null, lon: null, planetRadius: null, bodyName: null, heading: null, lowFuel: false },
@@ -239,7 +240,10 @@ export function applyJournalEvent(state, ev, { live } = { live: true }) {
           }
           state.vault.push(sample)
           if (!state.library.some((l) => l.id === id)) state.library.push({ ...sample })
-          if (live) state.session.samplesCompleted += 1
+          if (live) {
+            state.session.samplesCompleted += 1
+            state.session.valueSampled += value
+          }
         }
         markGenusCompleted(state, state.currentBodyName, genusLoc)
         state.sampling = null
@@ -283,6 +287,20 @@ export function applyJournalEvent(state, ev, { live } = { live: true }) {
     }
 
     case 'SellOrganicData': {
+      // Reconciliar first logged: Vista Genomics paga Bonus > 0 solo si fuiste
+      // el primero en registrar la variante — la verdad frente a la estimación ★
+      for (const b of ev.BioData || []) {
+        const sp = b.Species_Localised || b.Species
+        const confirmed = (b.Bonus || 0) > 0
+        for (let i = state.library.length - 1; i >= 0; i--) {
+          const l = state.library[i]
+          if (l.species === sp && l.firstLoggedConfirmed == null) {
+            l.firstLoggedConfirmed = confirmed
+            if (!confirmed) l.maybeFirstLogged = false
+            break
+          }
+        }
+      }
       const soldSpecies = new Set(
         (ev.BioData || []).map((b) => b.Species_Localised || b.Species)
       )

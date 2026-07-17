@@ -6,6 +6,7 @@ import { useSounds } from './useSounds.js'
 import SystemPanel from './components/SystemPanel.jsx'
 import Targets from './components/Targets.jsx'
 import RoutePanel from './components/RoutePanel.jsx'
+import Stats from './components/Stats.jsx'
 import VaultPanel from './components/VaultPanel.jsx'
 import Library from './components/Library.jsx'
 import Collection from './components/Collection.jsx'
@@ -20,6 +21,7 @@ import {
   IconRoute,
   IconWallet,
   IconChart,
+  IconGraph,
   IconUser,
   IconSettings,
   IconLeaf,
@@ -34,6 +36,7 @@ const TABS = [
   ['cartera', 'navVault', IconWallet],
   ['coleccion', 'navDex', IconLeaf],
   ['biblioteca', 'navLibrary', IconChart],
+  ['estadisticas', 'navStats', IconGraph],
   ['sesion', 'navSession', IconChart],
   ['cmdr', 'navCmdr', IconUser],
   ['ajustes', 'navSettings', IconSettings]
@@ -106,6 +109,7 @@ export default function App() {
           {tab === 'cartera' && <VaultPanel state={state} t={t} />}
           {tab === 'coleccion' && <Collection state={state} t={t} lang={lang} />}
           {tab === 'biblioteca' && <Library state={state} t={t} lang={lang} />}
+          {tab === 'estadisticas' && <Stats state={state} t={t} lang={lang} />}
           {tab === 'sesion' && <SessionPanel state={state} t={t} lang={lang} />}
           {tab === 'cmdr' && <CmdrPanel state={state} t={t} lang={lang} />}
           {tab === 'ajustes' && <SettingsPanel state={state} t={t} />}
