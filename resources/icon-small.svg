@@ -1,0 +1,22 @@
+<svg width="256" height="256" viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg">
+  <!-- variante simplificada para 32/16 px: menos trazos, hoja más grande -->
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="40%" r="78%">
+      <stop offset="0%" stop-color="#2a1c0c"/>
+      <stop offset="100%" stop-color="#0d0804"/>
+    </radialGradient>
+    <linearGradient id="leaf" x1="0" y1="0" x2="0.7" y2="1">
+      <stop offset="0%" stop-color="#b8f7ab"/>
+      <stop offset="100%" stop-color="#2c9a4b"/>
+    </linearGradient>
+  </defs>
+  <path d="M40 6 H186 L250 70 V214 Q250 250 214 250 H42 Q6 250 6 214 V42 Q6 6 40 6 Z"
+        fill="url(#bg)" stroke="#ff8a2a" stroke-opacity="0.55" stroke-width="6"/>
+  <path d="M 42 96 A 100 100 0 1 0 214 96" fill="none" stroke="#ff7d1a"
+        stroke-width="20" stroke-linecap="round"/>
+  <g transform="rotate(-8 128 124)">
+    <path d="M128 42 C182 70 196 140 128 202 C74 142 88 72 128 42 Z" fill="url(#leaf)"/>
+    <path d="M128 60 C127 104 127 152 129 190" fill="none" stroke="#0d3d1e"
+          stroke-width="9" stroke-linecap="round" opacity="0.9"/>
+  </g>
+</svg>

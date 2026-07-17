@@ -1,0 +1,56 @@
+<svg width="256" height="256" viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="40%" r="78%">
+      <stop offset="0%" stop-color="#261a0b"/>
+      <stop offset="55%" stop-color="#170f07"/>
+      <stop offset="100%" stop-color="#0a0603"/>
+    </radialGradient>
+    <linearGradient id="leaf" x1="0" y1="0" x2="0.7" y2="1">
+      <stop offset="0%" stop-color="#b2f7a6"/>
+      <stop offset="50%" stop-color="#5cd96e"/>
+      <stop offset="100%" stop-color="#1e7a3a"/>
+    </linearGradient>
+    <linearGradient id="arc" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#c85e0f"/>
+      <stop offset="55%" stop-color="#ff7d1a"/>
+      <stop offset="100%" stop-color="#ffb547"/>
+    </linearGradient>
+    <filter id="glow" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="7"/>
+    </filter>
+    <filter id="leafshadow" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="5"/>
+    </filter>
+  </defs>
+
+  <!-- placa: esquinas redondeadas salvo la superior derecha, recortada en diagonal -->
+  <path d="M34 6 H192 L250 64 V220 Q250 250 220 250 H36 Q6 250 6 220 V36 Q6 6 34 6 Z"
+        fill="url(#bg)" stroke="#ff8a2a" stroke-opacity="0.38" stroke-width="2"/>
+  <path d="M38 16 H188 L240 68 V216 Q240 240 216 240 H40 Q16 240 16 216 V40 Q16 16 38 16 Z"
+        fill="none" stroke="#ff8a2a" stroke-opacity="0.14" stroke-width="1.5"/>
+
+  <!-- anillo de ticks del sampler -->
+  <circle cx="128" cy="134" r="94" fill="none" stroke="#ff8a2a" stroke-opacity="0.20"
+          stroke-width="9" stroke-dasharray="2.5 12.2"/>
+
+  <!-- arco de escaneo con brillo -->
+  <path d="M 45 100 A 94 94 0 1 0 211 100" fill="none" stroke="#ff7d1a" stroke-opacity="0.35"
+        stroke-width="22" stroke-linecap="round" filter="url(#glow)"/>
+  <path d="M 45 100 A 94 94 0 1 0 211 100" fill="none" stroke="url(#arc)"
+        stroke-width="12" stroke-linecap="round"/>
+
+  <!-- sombra de la hoja -->
+  <path d="M128 62 C170 84 182 140 128 194 C86 142 96 86 128 62 Z"
+        fill="#000" opacity="0.4" filter="url(#leafshadow)" transform="rotate(-9 128 128) translate(4 6)"/>
+
+  <!-- hoja -->
+  <g transform="rotate(-9 128 128)">
+    <path d="M128 62 C170 84 182 140 128 194 C86 142 96 86 128 62 Z" fill="url(#leaf)"/>
+    <path d="M128 74 C127 108 127 148 129 184" fill="none" stroke="#0d3d1e"
+          stroke-width="5" stroke-linecap="round" opacity="0.85"/>
+    <path d="M128 104 C138 108 148 116 154 126 M128 132 C120 136 111 143 105 152"
+          fill="none" stroke="#0d3d1e" stroke-width="3.5" stroke-linecap="round" opacity="0.65"/>
+    <ellipse cx="113" cy="92" rx="14" ry="22" fill="#ffffff" opacity="0.12"
+             transform="rotate(24 113 92)"/>
+  </g>
+</svg>
