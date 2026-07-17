@@ -17,14 +17,16 @@ export default function SettingsPanel({ state, t }) {
   const [journalDir, setJournalDir] = useState(state.settings.journalDir)
   const [inaraKey, setInaraKey] = useState(state.settings.inaraKey)
   const [cmdrName, setCmdrName] = useState(state.settings.cmdrName)
+  const [webhook, setWebhook] = useState(state.settings.discord?.webhook || '')
   const [saved, setSaved] = useState(false)
+  const [dcTest, setDcTest] = useState(null)
 
   const theme = { ...DEFAULT_THEME, ...(state.settings.theme || {}) }
   const sounds = { enabled: true, volume: 0.5, ...(state.settings.sounds || {}) }
   const lang = state.settings.lang
 
   const save = async () => {
-    await window.artemis.setSettings({ journalDir, inaraKey, cmdrName })
+    await window.artemis.setSettings({ journalDir, inaraKey, cmdrName, discord: { webhook } })
     setSaved(true)
     setTimeout(() => setSaved(false), 2000)
   }
@@ -32,6 +34,14 @@ export default function SettingsPanel({ state, t }) {
   const setTheme = (patch) => window.artemis.setSettings({ theme: patch })
   const setLang = (l) => window.artemis.setSettings({ lang: l })
   const setSounds = (patch) => window.artemis.setSettings({ sounds: patch })
+  const discord = { enabled: true, ...(state.settings.discord || {}) }
+
+  const testDiscord = async () => {
+    setDcTest('...')
+    const r = await window.artemis.discordTest()
+    setDcTest(r?.ok ? 'ok' : r?.error || 'error')
+    setTimeout(() => setDcTest(null), 3500)
+  }
 
   return (
     <>
@@ -163,6 +173,39 @@ export default function SettingsPanel({ state, t }) {
           </button>
           {saved && <span className="v good">{t('setSaved')}</span>}
         </div>
+      </div>
+
+      <div className="panel">
+        <h2>
+          <IconSync size={16} /> {t('setDiscord')}
+        </h2>
+        <div className="muted" style={{ marginBottom: 6 }}>{t('setDiscordDesc')}</div>
+        <label className="hud">
+          <IconKey size={15} /> {t('setDiscordUrl')}
+        </label>
+        <input
+          className="hud"
+          value={webhook}
+          placeholder={t('setDiscordPh')}
+          onChange={(e) => setWebhook(e.target.value)}
+        />
+        <div style={{ marginTop: 14, display: 'flex', gap: 12, alignItems: 'center', flexWrap: 'wrap' }}>
+          <button className="hud" onClick={save}>
+            <IconSave size={17} /> {t('setSave')}
+          </button>
+          <button
+            className={`hud ${discord.enabled ? '' : 'ghost'}`}
+            onClick={() => window.artemis.setSettings({ discord: { enabled: !discord.enabled } })}
+          >
+            {t('setDiscordToggle', discord.enabled)}
+          </button>
+          <button className="hud ghost" onClick={testDiscord} disabled={!discord.hasWebhook || dcTest === '...'}>
+            {t('setDiscordTest')}
+          </button>
+          {dcTest === 'ok' && <span className="v good">{t('setDiscordOk')}</span>}
+          {dcTest && dcTest !== 'ok' && dcTest !== '...' && <span className="warn">⚠ {dcTest}</span>}
+        </div>
+        <div className="muted" style={{ marginTop: 10 }}>{t('setDiscordHint')}</div>
       </div>
 
       <div className="panel">

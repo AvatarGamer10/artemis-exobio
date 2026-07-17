@@ -27,6 +27,8 @@ export function createGameState(persisted = {}) {
     ship: null,
     shipRaw: null, // Loadout completo para exportar como SLEF; se excluye del snapshot
     route: persisted.route || null, // { systems: [{system, neutron, dist}], index, dest }
+    // Migas de pan: rastro de posiciones sobre la superficie del cuerpo actual
+    trail: [],
     session: {
       startedAt: new Date().toISOString(),
       jumps: 0,
@@ -35,7 +37,7 @@ export function createGameState(persisted = {}) {
       samplesCompleted: 0,
       creditsEarned: 0
     },
-    status: { lat: null, lon: null, planetRadius: null, bodyName: null, lowFuel: false },
+    status: { lat: null, lon: null, planetRadius: null, bodyName: null, heading: null, lowFuel: false },
     codexNew: [], // entradas nuevas de esta sesión
     inara: null,
     lastEventAt: null
@@ -262,6 +264,7 @@ export function applyJournalEvent(state, ev, { live } = { live: true }) {
           step,
           colonyRange: getColonyRange(genusLoc),
           lastSamplePos: pos,
+          samplePositions: pos ? [pos] : [],
           currentDist: 0,
           clear: false,
           isNewVariant,
@@ -270,6 +273,9 @@ export function applyJournalEvent(state, ev, { live } = { live: true }) {
       } else {
         state.sampling.step = Math.max(state.sampling.step, step)
         state.sampling.lastSamplePos = pos
+        if (pos && state.sampling.samplePositions.length < 3) {
+          state.sampling.samplePositions.push(pos)
+        }
         state.sampling.currentDist = 0
         state.sampling.clear = false
       }
@@ -330,11 +336,25 @@ export function applyStatus(state, st) {
     changed = true
   }
   if (st.Latitude != null && st.Longitude != null) {
+    // Cambio de cuerpo → rastro nuevo
+    if (st.BodyName && st.BodyName !== state.status.bodyName) state.trail = []
     state.status.lat = st.Latitude
     state.status.lon = st.Longitude
     state.status.planetRadius = st.PlanetRadius ?? state.status.planetRadius
     state.status.bodyName = st.BodyName ?? state.status.bodyName
+    state.status.heading = st.Heading ?? state.status.heading
     changed = true
+    // Migas de pan: guardar posición si nos hemos movido lo suficiente
+    const lastCrumb = state.trail[state.trail.length - 1]
+    const here = { lat: st.Latitude, lon: st.Longitude }
+    if (
+      state.status.planetRadius &&
+      (!lastCrumb ||
+        (surfaceDistance(lastCrumb, here, state.status.planetRadius) ?? 0) > 12)
+    ) {
+      state.trail.push(here)
+      if (state.trail.length > 240) state.trail.shift()
+    }
     // Distancia de colonia respecto a la última muestra
     if (state.sampling?.lastSamplePos && state.status.planetRadius) {
       const d = surfaceDistance(

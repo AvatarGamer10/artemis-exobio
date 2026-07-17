@@ -19,5 +19,6 @@ contextBridge.exposeInMainWorld('artemis', {
   plotRoute: (opts) => ipcRenderer.invoke('route:plot', opts),
   importRoute: () => ipcRenderer.invoke('route:import'),
   clearRoute: () => ipcRenderer.invoke('route:clear'),
-  getSlef: () => ipcRenderer.invoke('ship:slef')
+  getSlef: () => ipcRenderer.invoke('ship:slef'),
+  discordTest: () => ipcRenderer.invoke('discord:test')
 })

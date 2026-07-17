@@ -16,6 +16,7 @@ import { createGameState, applyJournalEvent, applyStatus, vaultValue } from './s
 import { getCommanderProfile } from './inara.js'
 import { edsmSystem, canonnSystemPoi, spanshSearchSpecies, spanshPlotRoute } from './apis.js'
 import { checkLatest, downloadAndInstall } from './updater.js'
+import { postDiscord, sampleEmbed, sessionEmbed, testEmbed } from './discord.js'
 import { loadStore, saveStore } from './store.js'
 
 let mainWin = null
@@ -43,6 +44,11 @@ function snapshot() {
       theme: store.theme || null,
       sounds: store.sounds || { enabled: true, volume: 0.5 },
       notify: store.notify || { enabled: true },
+      discord: {
+        enabled: store.discord?.enabled !== false,
+        hasWebhook: !!store.discord?.webhook,
+        webhook: store.discord?.webhook ? '••••' + String(store.discord.webhook).slice(-8) : ''
+      },
       onboarded: !!store.onboarded
     },
     overlay: { visible: !!overlayWin?.isVisible(), clickThrough: overlayClickThrough },
@@ -109,8 +115,17 @@ function notify(kind, ...args) {
   }
 }
 
+// Feed de Discord (webhook del escuadrón): variantes nuevas, legendarias y sesiones
+function discordPost(embed) {
+  const cfg = store.discord
+  if (!cfg?.webhook || cfg.enabled === false) return
+  postDiscord(cfg.webhook, embed).then((r) => {
+    if (!r.ok) console.error('[discord]', r.error)
+  })
+}
+
 // Disparadores de notificación sobre eventos en vivo del journal
-function checkNotifications(ev) {
+function checkNotifications(ev, ctx = {}) {
   if (ev.event === 'ScanOrganic' && ev.ScanType === 'Log' && state.sampling?.isNewVariant) {
     notify('newVariant', state.sampling.variant || state.sampling.species)
   }
@@ -118,6 +133,17 @@ function checkNotifications(ev) {
     const last = state.vault[state.vault.length - 1]
     if (last && last.value >= 15000000) {
       notify('bigSample', last.species, Math.round(last.value / 1e6))
+    }
+    // Discord: muestra completada que es variante nueva o legendaria
+    if (last && last.timestamp === ev.timestamp && (ctx.wasNewVariant || last.value >= 15000000)) {
+      discordPost(
+        sampleEmbed({
+          sample: last,
+          cmdr: state.commander.name,
+          lang: store.lang || 'es',
+          isNew: !!ctx.wasNewVariant
+        })
+      )
     }
   }
   if (ev.event === 'SAASignalsFound' || ev.event === 'Scan' || ev.event === 'FSSBodySignals') {
@@ -133,6 +159,14 @@ function checkNotifications(ev) {
   }
   if (ev.event === 'Shutdown' && state.session.jumps + state.session.samplesCompleted > 0) {
     notify('session', state.session)
+    discordPost(
+      sessionEmbed({
+        session: state.session,
+        unsold: vaultValue(state),
+        cmdr: state.commander.name,
+        lang: store.lang || 'es'
+      })
+    )
   }
 }
 
@@ -223,6 +257,16 @@ function startWatcher() {
   watcher = new JournalWatcher(dir, {
     onEvent: (ev, live) => {
       if (process.env.ARTEMIS_DEBUG) console.log('[event]', ev.event, 'live:', live)
+      // Antes de aplicar: ¿este Analyse completa una variante que aún no está en
+      // la biblioteca? (tras aplicar, ya estará dentro y no se puede saber)
+      let wasNewVariant = false
+      if (live && ev.event === 'ScanOrganic' && ev.ScanType === 'Analyse') {
+        const variantLoc = ev.Variant_Localised || ev.Variant || null
+        const speciesLoc = ev.Species_Localised || ev.Species
+        wasNewVariant = variantLoc
+          ? !state.library.some((l) => l.variant === variantLoc)
+          : !state.library.some((l) => l.species === speciesLoc)
+      }
       const changed = applyJournalEvent(state, ev, { live })
       if (changed && live) {
         if (ev.event === 'ScanOrganic' || ev.event === 'SellOrganicData' || ev.event === 'Died') {
@@ -234,7 +278,7 @@ function startWatcher() {
         }
         broadcast()
       }
-      if (live) checkNotifications(ev)
+      if (live) checkNotifications(ev, { wasNewVariant })
     },
     onStatus: (st) => {
       if (applyStatus(state, st)) broadcast()
@@ -340,6 +384,14 @@ app.whenReady().then(() => {
     if (patch.sounds != null)
       store.sounds = { enabled: true, volume: 0.5, ...(store.sounds || {}), ...patch.sounds }
     if (patch.notify != null) store.notify = { enabled: true, ...(store.notify || {}), ...patch.notify }
+    if (patch.discord != null) {
+      const d = { enabled: true, ...(store.discord || {}), ...patch.discord }
+      // no machacar el webhook real con la versión enmascarada del formulario
+      if (typeof patch.discord.webhook === 'string' && patch.discord.webhook.startsWith('••••')) {
+        d.webhook = store.discord?.webhook || ''
+      }
+      store.discord = d
+    }
     saveStore(store)
     if (dirChanged) {
       state = createGameState(store)
@@ -429,6 +481,13 @@ app.whenReady().then(() => {
       broadcast()
       return { ok: false, error: update.error }
     }
+  })
+  ipcMain.handle('discord:test', async () => {
+    if (!store.discord?.webhook) return { ok: false, error: 'no-webhook' }
+    return postDiscord(
+      store.discord.webhook,
+      testEmbed(store.lang || 'es', state.commander.name || store.cmdrName)
+    )
   })
   ipcMain.handle('vault:clear', () => {
     state.vault = []

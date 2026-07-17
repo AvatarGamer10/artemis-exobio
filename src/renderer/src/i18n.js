@@ -204,6 +204,16 @@ const dict = {
     ovRoute: 'RUTA',
     ovNext: 'Siguiente',
 
+    setDiscord: 'FEED DE DISCORD (ESCUADRÓN)',
+    setDiscordDesc: 'Publica tus hitos en un canal de Discord: variantes nuevas para tu colección, muestras legendarias (≥15M) y el resumen al cerrar sesión.',
+    setDiscordUrl: 'URL DEL WEBHOOK',
+    setDiscordPh: 'https://discord.com/api/webhooks/…',
+    setDiscordToggle: (on) => `Feed: ${on ? 'ON' : 'OFF'}`,
+    setDiscordTest: 'Enviar prueba',
+    setDiscordOk: '✓ Publicado en Discord',
+    setDiscordHint: 'Para crear el webhook: en tu servidor de Discord → Ajustes del canal → Integraciones → Webhooks → Nuevo webhook → Copiar URL.',
+    smapLegend: '①② muestras · círculo = radio de colonia · △ = tú · ⌀ = ancho del mapa',
+
     updTitle: (v) => `Actualización disponible — v${v}`,
     updBody: 'Hay una versión nueva de Artemis en GitHub. Se descargará el instalador, se ejecutará y la app se cerrará para actualizarse.',
     updNow: 'Descargar e instalar',
@@ -437,6 +447,16 @@ const dict = {
     rtDistCol: 'JUMP (LY)',
     ovRoute: 'ROUTE',
     ovNext: 'Next',
+
+    setDiscord: 'DISCORD FEED (SQUADRON)',
+    setDiscordDesc: 'Posts your milestones to a Discord channel: new variants for your collection, legendary samples (≥15M) and the session summary on shutdown.',
+    setDiscordUrl: 'WEBHOOK URL',
+    setDiscordPh: 'https://discord.com/api/webhooks/…',
+    setDiscordToggle: (on) => `Feed: ${on ? 'ON' : 'OFF'}`,
+    setDiscordTest: 'Send test',
+    setDiscordOk: '✓ Posted to Discord',
+    setDiscordHint: 'To create the webhook: in your Discord server → Channel settings → Integrations → Webhooks → New webhook → Copy URL.',
+    smapLegend: '①② samples · circle = colony range · △ = you · ⌀ = map width',
 
     updTitle: (v) => `Update available — v${v}`,
     updBody: 'A new version of Artemis is on GitHub. The installer will download, run, and the app will close to update itself.',

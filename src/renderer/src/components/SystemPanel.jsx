@@ -2,6 +2,7 @@ import React from 'react'
 import { cr } from '../useArtemis.js'
 import SystemMap from './SystemMap.jsx'
 import SamplerDial from './SamplerDial.jsx'
+import SurfaceMap from './SurfaceMap.jsx'
 import { IconPlanet, IconLeaf, IconWalk, IconRadar, IconCheck, IconSync } from '../Icons.jsx'
 
 function ExternalContext({ ext, t }) {
@@ -57,7 +58,7 @@ function ExternalContext({ ext, t }) {
   )
 }
 
-function Sampling({ s, t }) {
+function Sampling({ s, t, state }) {
   if (!s) return null
   return (
     <div className="panel">
@@ -71,6 +72,9 @@ function Sampling({ s, t }) {
           range={s.colonyRange}
           clear={s.clear}
         />
+        <div>
+          <SurfaceMap state={state} size={168} />
+        </div>
         <div className="dial-info">
           <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 10, flexWrap: 'wrap' }}>
             <span className="species" style={{ fontSize: 19 }}>{s.species}</span>
@@ -91,6 +95,11 @@ function Sampling({ s, t }) {
           {s.colonyRange != null && (
             <div className={s.clear ? 'v good' : 'muted'} style={{ marginTop: 10 }}>
               {s.clear ? t('colonyClear') : t('colonyMove')}
+            </div>
+          )}
+          {state.status.lat != null && s.lastSamplePos && (
+            <div className="muted" style={{ marginTop: 8, fontSize: 11 }}>
+              {t('smapLegend')}
             </div>
           )}
         </div>
@@ -196,7 +205,7 @@ export default function SystemPanel({ state, t }) {
       </div>
       <ExternalContext ext={state.external} t={t} />
       <SystemMap state={state} t={t} />
-      <Sampling s={state.sampling} t={t} />
+      <Sampling s={state.sampling} t={t} state={state} />
       {bodies.length === 0 ? (
         <div className="panel">
           <div className="empty">

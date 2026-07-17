@@ -281,6 +281,23 @@ td .species, tr td:first-child { font-size: 13px; }
 .dial .pip.done { fill: var(--accent); stroke: var(--accent); }
 .dial-info { flex: 1; min-width: 220px; }
 
+/* ── Mini-mapa de superficie (migas de pan) ── */
+.smap { display: block; margin: 0 auto; }
+.smap .compass { fill: none; stroke: var(--hairline); }
+.smap .north { fill: var(--ink-dim); font-family: var(--mono); font-size: 8px; }
+.smap .trail {
+  fill: none;
+  stroke: color-mix(in srgb, var(--ink-dim) 55%, transparent);
+  stroke-width: 1.2;
+  stroke-dasharray: 2 2.5;
+}
+.smap .colony { fill: none; stroke: var(--accent); stroke-width: 1.5; stroke-dasharray: 5 3; opacity: 0.9; }
+.smap .colony.ok { stroke: var(--good); }
+.smap .sample { fill: var(--soft); stroke: var(--accent); stroke-width: 1; }
+.smap .sample-n { fill: var(--hi); font-family: var(--mono); font-size: 7.5px; font-weight: 700; }
+.smap .player { fill: var(--hi); }
+.smap .scale-label { fill: var(--ink-dim); font-family: var(--mono); font-size: 8px; }
+
 /* ── Botones: instrumento, esquina recortada ── */
 button.hud {
   display: inline-flex; align-items: center; justify-content: center; gap: 10px;

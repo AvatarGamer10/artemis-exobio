@@ -3,6 +3,7 @@ import { useArtemis, cr } from './useArtemis.js'
 import { useT } from './i18n.js'
 import { useTheme } from './theme.js'
 import SamplerDial from './components/SamplerDial.jsx'
+import SurfaceMap from './components/SurfaceMap.jsx'
 
 export default function Overlay() {
   const state = useArtemis()
@@ -47,6 +48,9 @@ export default function Overlay() {
                 clear={s.clear}
                 size={122}
               />
+            </div>
+            <div className="ov-dial">
+              <SurfaceMap state={state} size={132} />
             </div>
           </div>
         )}

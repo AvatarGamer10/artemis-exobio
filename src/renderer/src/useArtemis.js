@@ -46,8 +46,22 @@ const DEMO_STATE = {
     currentDist: 340,
     clear: false,
     isNewVariant: true,
-    value: 8418000
+    value: 8418000,
+    lastSamplePos: { lat: 12.006, lon: -45.003 },
+    samplePositions: [
+      { lat: 12.0, lon: -45.0 },
+      { lat: 12.006, lon: -45.003 }
+    ]
   },
+  trail: [
+    { lat: 11.998, lon: -45.001 },
+    { lat: 12.0, lon: -45.0 },
+    { lat: 12.002, lon: -45.0005 },
+    { lat: 12.004, lon: -45.002 },
+    { lat: 12.006, lon: -45.003 },
+    { lat: 12.0075, lon: -45.0045 },
+    { lat: 12.0085, lon: -45.006 }
+  ],
   vault: [
     {
       id: '1',
@@ -91,7 +105,14 @@ const DEMO_STATE = {
     samplesCompleted: 5,
     creditsEarned: 42000000
   },
-  status: { lowFuel: false, bodyName: null },
+  status: {
+    lowFuel: false,
+    bodyName: 'Prestige BIO-1 c 3',
+    lat: 12.0085,
+    lon: -45.006,
+    planetRadius: 2900000,
+    heading: 205
+  },
   codexNew: [
     { name: 'Stratum Tectonicas - Verde', system: 'Prestige BIO-1', region: 'Inner Orion Spur' }
   ],
@@ -103,6 +124,7 @@ const DEMO_STATE = {
     cmdrName: 'Mayca',
     lang: 'es',
     theme: null,
+    discord: { enabled: true, hasWebhook: false, webhook: '' },
     sounds: { enabled: true, volume: 0.5 },
     notify: { enabled: true },
     // con ?tour en la URL se previsualiza el asistente de primer arranque
