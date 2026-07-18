@@ -226,6 +226,15 @@ const dict = {
     setBackupImported: (n) => `✓ Importada — biblioteca con ${n} muestras`,
     setBackupErr: 'Archivo no válido',
 
+    setRpc: 'DISCORD RICH PRESENCE',
+    setRpcDesc: 'Tu perfil de Discord muestra en vivo qué exploras y qué estás muestreando, con el tiempo de sesión.',
+    setRpcId: 'APPLICATION ID',
+    setRpcPh: 'p. ej. 1234567890123456789',
+    setRpcToggle: (on) => `Presencia: ${on ? 'ON' : 'OFF'}`,
+    setRpcOn: 'Conectado a Discord',
+    setRpcOff: 'Sin conexión',
+    setRpcHelp: 'Para conseguir el ID (1 minuto): discord.com/developers/applications → New Application → nómbrala "ARTEMIS" → copia el "Application ID" y pégalo aquí. Con la app de Discord abierta, Artemis se conecta sola (y reintenta cada 30 s si no la encuentra). Opcional: en Rich Presence → Art Assets sube el icono con el nombre "artemis" para que salga la imagen.',
+
     setDiscord: 'FEED DE DISCORD (ESCUADRÓN)',
     setDiscordDesc: 'Publica tus hitos en un canal de Discord: variantes nuevas para tu colección, muestras legendarias (≥15M) y el resumen al cerrar sesión.',
     setDiscordUrl: 'URL DEL WEBHOOK',
@@ -491,6 +500,15 @@ const dict = {
     setBackupOk: '✓ Backup saved',
     setBackupImported: (n) => `✓ Imported — library now holds ${n} samples`,
     setBackupErr: 'Invalid file',
+
+    setRpc: 'DISCORD RICH PRESENCE',
+    setRpcDesc: 'Your Discord profile shows live what you are exploring and sampling, with the session timer.',
+    setRpcId: 'APPLICATION ID',
+    setRpcPh: 'e.g. 1234567890123456789',
+    setRpcToggle: (on) => `Presence: ${on ? 'ON' : 'OFF'}`,
+    setRpcOn: 'Connected to Discord',
+    setRpcOff: 'Not connected',
+    setRpcHelp: 'To get the ID (1 minute): discord.com/developers/applications → New Application → name it "ARTEMIS" → copy the "Application ID" and paste it here. With the Discord app open, Artemis connects on its own (and retries every 30 s). Optional: under Rich Presence → Art Assets upload the icon named "artemis" to show the image.',
 
     setDiscord: 'DISCORD FEED (SQUADRON)',
     setDiscordDesc: 'Posts your milestones to a Discord channel: new variants for your collection, legendary samples (≥15M) and the session summary on shutdown.',

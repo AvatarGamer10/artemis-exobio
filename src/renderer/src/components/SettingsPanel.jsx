@@ -18,6 +18,7 @@ export default function SettingsPanel({ state, t }) {
   const [inaraKey, setInaraKey] = useState(state.settings.inaraKey)
   const [cmdrName, setCmdrName] = useState(state.settings.cmdrName)
   const [webhook, setWebhook] = useState(state.settings.discord?.webhook || '')
+  const [rpcId, setRpcId] = useState(state.settings.rpc?.appId || '')
   const [saved, setSaved] = useState(false)
   const [dcTest, setDcTest] = useState(null)
   const [bkMsg, setBkMsg] = useState(null)
@@ -27,7 +28,13 @@ export default function SettingsPanel({ state, t }) {
   const lang = state.settings.lang
 
   const save = async () => {
-    await window.artemis.setSettings({ journalDir, inaraKey, cmdrName, discord: { webhook } })
+    await window.artemis.setSettings({
+      journalDir,
+      inaraKey,
+      cmdrName,
+      discord: { webhook },
+      rpc: { appId: rpcId }
+    })
     setSaved(true)
     setTimeout(() => setSaved(false), 2000)
   }
@@ -238,6 +245,38 @@ export default function SettingsPanel({ state, t }) {
           {dcTest && dcTest !== 'ok' && dcTest !== '...' && <span className="warn">⚠ {dcTest}</span>}
         </div>
         <div className="muted" style={{ marginTop: 10 }}>{t('setDiscordHint')}</div>
+      </div>
+
+      <div className="panel">
+        <h2>
+          <IconUser size={16} /> {t('setRpc')}
+        </h2>
+        <div className="muted" style={{ marginBottom: 6 }}>{t('setRpcDesc')}</div>
+        <label className="hud">
+          <IconKey size={15} /> {t('setRpcId')}
+        </label>
+        <input
+          className="hud"
+          value={rpcId}
+          placeholder={t('setRpcPh')}
+          onChange={(e) => setRpcId(e.target.value)}
+        />
+        <div style={{ marginTop: 14, display: 'flex', gap: 12, alignItems: 'center', flexWrap: 'wrap' }}>
+          <button className="hud" onClick={save}>
+            <IconSave size={17} /> {t('setSave')}
+          </button>
+          <button
+            className={`hud ${state.settings.rpc?.enabled ? '' : 'ghost'}`}
+            onClick={() => window.artemis.setSettings({ rpc: { enabled: !state.settings.rpc?.enabled } })}
+          >
+            {t('setRpcToggle', state.settings.rpc?.enabled)}
+          </button>
+          <span className={`chip`}>
+            <span className={`dot ${state.rpcConnected ? '' : 'off'}`} />
+            {state.rpcConnected ? t('setRpcOn') : t('setRpcOff')}
+          </span>
+        </div>
+        <div className="muted" style={{ marginTop: 10 }}>{t('setRpcHelp')}</div>
       </div>
 
       <div className="panel">

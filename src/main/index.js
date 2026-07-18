@@ -19,6 +19,7 @@ import { getCommanderProfile } from './inara.js'
 import { edsmSystem, canonnSystemPoi, spanshSearchSpecies, spanshPlotRoute } from './apis.js'
 import { checkLatest, downloadAndInstall } from './updater.js'
 import { postDiscord, sampleEmbed, sessionEmbed, testEmbed } from './discord.js'
+import { DiscordRPC } from './rpc.js'
 import { loadStore, saveStore } from './store.js'
 
 let mainWin = null
@@ -52,8 +53,10 @@ function snapshot() {
         hasWebhook: !!store.discord?.webhook,
         webhook: store.discord?.webhook ? '••••' + String(store.discord.webhook).slice(-8) : ''
       },
+      rpc: { enabled: store.rpc?.enabled !== false, appId: store.rpc?.appId || '' },
       onboarded: !!store.onboarded
     },
+    rpcConnected,
     overlay: { visible: !!overlayWin?.isVisible(), clickThrough: overlayClickThrough },
     watcherError: watcher?.lastError || null,
     external,
@@ -71,6 +74,7 @@ function broadcast() {
     for (const w of [mainWin, overlayWin]) {
       if (w && !w.isDestroyed()) w.webContents.send('state', snap)
     }
+    updateRpc()
   }, 100)
 }
 
@@ -116,6 +120,76 @@ function notify(kind, ...args) {
   } catch {
     // sin soporte de notificaciones: silencio
   }
+}
+
+// ── Discord Rich Presence ──
+let rpc = null
+let rpcConnected = false
+let rpcRetry = null
+let rpcLastUpdate = 0
+
+function buildRpcActivity() {
+  const es = (store.lang || 'es') !== 'en'
+  const s = state.sampling
+  let details
+  let stateLine
+  if (s) {
+    details = `${es ? 'Muestreando' : 'Sampling'} ${s.species} (${s.step}/3)`
+    stateLine = state.system.name || undefined
+  } else {
+    details = state.system.name
+      ? `${es ? 'Explorando' : 'Exploring'} ${state.system.name}`
+      : es
+        ? 'Preparando la expedición'
+        : 'Preparing the expedition'
+    const n = state.session.samplesCompleted
+    stateLine = `${n} ${es ? 'especies esta sesión' : 'species this session'} · ${Math.round(vaultValue(state) / 1e6)}M cr`
+  }
+  return {
+    details: details.slice(0, 128),
+    state: stateLine ? stateLine.slice(0, 128) : undefined,
+    timestamps: { start: new Date(state.session.startedAt).getTime() },
+    assets: { large_image: 'artemis', large_text: 'ARTEMIS — Exobiology Companion' }
+  }
+}
+
+function stopRpc() {
+  clearTimeout(rpcRetry)
+  rpc?.destroy()
+  rpc = null
+  rpcConnected = false
+}
+
+async function startRpc() {
+  stopRpc()
+  const cfg = store.rpc
+  if (!cfg?.appId || cfg.enabled === false) {
+    broadcast()
+    return
+  }
+  rpc = new DiscordRPC(cfg.appId)
+  rpcConnected = await rpc.connect()
+  if (rpcConnected) {
+    rpc.once('close', () => {
+      rpcConnected = false
+      broadcast()
+      rpcRetry = setTimeout(startRpc, 30000)
+    })
+    updateRpc(true)
+  } else {
+    // Discord cerrado o app ID inválido: reintentar con calma
+    rpcRetry = setTimeout(startRpc, 30000)
+  }
+  broadcast()
+}
+
+// Discord limita a ~1 actualización cada 15 s
+function updateRpc(force = false) {
+  if (!rpcConnected || !rpc) return
+  const now = Date.now()
+  if (!force && now - rpcLastUpdate < 15000) return
+  rpcLastUpdate = now
+  rpc.setActivity(buildRpcActivity())
 }
 
 // Feed de Discord (webhook del escuadrón): variantes nuevas, legendarias y sesiones
@@ -432,6 +506,11 @@ app.whenReady().then(() => {
       }
       store.discord = d
     }
+    if (patch.rpc != null) {
+      store.rpc = { enabled: true, ...(store.rpc || {}), ...patch.rpc }
+      if (typeof store.rpc.appId === 'string') store.rpc.appId = store.rpc.appId.trim()
+      startRpc()
+    }
     saveStore(store)
     if (dirChanged) {
       state = createGameState(store)
@@ -625,10 +704,14 @@ app.whenReady().then(() => {
   createTray()
   startWatcher()
   setTimeout(checkForUpdate, 4000)
+  setTimeout(startRpc, 2500)
 
   globalShortcut.register('CommandOrControl+Alt+O', toggleOverlay)
   globalShortcut.register('CommandOrControl+Alt+M', toggleClickThrough)
 })
 
-app.on('will-quit', () => globalShortcut.unregisterAll())
+app.on('will-quit', () => {
+  globalShortcut.unregisterAll()
+  stopRpc()
+})
 app.on('window-all-closed', () => app.quit())

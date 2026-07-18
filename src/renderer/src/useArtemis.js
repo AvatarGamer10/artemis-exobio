@@ -114,6 +114,7 @@ const DEMO_STATE = {
     lang: 'es',
     theme: null,
     discord: { enabled: true, hasWebhook: false, webhook: '' },
+    rpc: { enabled: true, appId: '' },
     sounds: { enabled: true, volume: 0.5 },
     notify: { enabled: true },
     // con ?tour en la URL se previsualiza el asistente de primer arranque
@@ -121,7 +122,8 @@ const DEMO_STATE = {
   },
   overlay: { visible: true, clickThrough: false },
   watcherError: null,
-  appVersion: '0.7.0',
+  appVersion: '0.11.0',
+  rpcConnected: false,
   ship: { type: 'Krait Phantom', name: 'Perseverance', ident: 'MAY-01', maxJumpRange: 68.42, cargo: 32 },
   route: {
     dest: 'Colonia',
