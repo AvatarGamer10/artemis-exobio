@@ -1,85 +1,99 @@
-# ARTEMIS — Compañero de Exobiología para Elite Dangerous
+# ARTEMIS — Exobiology Companion for Elite Dangerous
 
-App de escritorio (Electron + React) que lee el journal de Elite Dangerous: Odyssey en
-tiempo real y te asiste en todo el flujo de exobiología, con overlay para jugar y
-ventana completa para planificar.
+Desktop app (Electron + React) that reads the Elite Dangerous: Odyssey journal in
+real time and assists you through the entire exobiology loop, with an in-game
+overlay for playing and a full window for planning.
 
 ![version](https://img.shields.io/badge/version-0.11.0-orange) ![platform](https://img.shields.io/badge/platform-Windows-blue)
 
-## Características
+🇪🇸 [Léeme en español](README.es.md)
 
-- **Sistema**: mapa lineal de los cuerpos escaneados (bio en verde), señales biológicas
-  por cuerpo, checklist de géneros con distancia de colonia clonal.
-- **Predicción de especies**: al escanear un cuerpo, cruza atmósfera, temperatura,
-  gravedad, clase y vulcanismo contra las condiciones de ~90 especies y te dice qué
-  puede haber y cuánto vale — antes de aterrizar. Se filtra sola tras el DSS.
-- **Contexto online**: EDSM (¿sistema virgen? → posible first discovery) y Canonn
-  (bio ya reportada por la comunidad) en cada salto.
-- **Objetivos**: buscador Spansh de cuerpos con especies premium (≥9M cr) cerca de tu
-  posición, con botón para copiar el sistema y plotear.
-- **Ruta**: plotea con Spansh desde tu sistema actual usando el rango real de tu nave
-  (leído del journal), copia tu build en SLEF para el Galaxy Plotter, importa rutas
-  en JSON, y sigue el progreso en vivo (ventana + overlay) con cada salto.
-- **Asistente de muestreo**: dial radial estilo Genetic Sampler con la distancia de
-  colonia en vivo desde Status.json, y aviso visual y sonoro al salir del radio.
-- **Mini-mapa de superficie**: migas de pan de tu camino a pie, posiciones de las
-  muestras ①②, círculo del radio de colonia a escala y tu rumbo — en overlay y ventana.
-- **Feed de Discord**: pega el webhook de tu escuadrón y Artemis publica tus variantes
-  nuevas, muestras legendarias y el resumen de cada sesión.
-- **Discord Rich Presence**: tu perfil muestra en vivo qué exploras y qué muestreas
-  (requiere crear una app gratuita en el portal de Discord y pegar su ID).
-- **Cartera**: valor sin vender, aviso de pérdida al morir, estimación de first logged (x5).
-- **Colección**: pokédex de flora — todas las especies del catálogo con rareza
-  (glow común → legendaria), cada variante de color coleccionada con fecha y lugar,
-  y aviso en el HUD (efecto + sonido) al escanear una variante que no tienes.
-- **Biblioteca**: registro permanente y buscable de todo lo muestreado, con export a
-  CSV y first logged confirmados al vender (✪).
-- **Estadísticas**: créditos por día (30 días), % de colección por género, récords
-  (mejor día, especie top, first logged confirmados, total acumulado).
-- **Bandeja del sistema**: minimizar esconde a la bandeja; menú rápido con overlay y salir.
-- **Copia de seguridad**: exporta/importa tu colección completa (la importación
-  fusiona sin perder nada).
-- **Notificaciones de Windows**: premio gordo detectado, muestra legendaria, variante
-  nueva y resumen al cerrar sesión (desactivables).
-- **Alertas sonoras**: muestra completada, fanfarria de premio gordo (≥15M), radio de
-  colonia superado, combustible bajo. Sintetizadas, sin archivos de audio.
-- **Inara**: perfil de CMDR con rangos y progreso (API key personal).
-- **Overlay** siempre encima (`Ctrl+Alt+O` mostrar/ocultar, `Ctrl+Alt+M` clics
-  atraviesan) + ventana completa. Tema personalizable (color de acento, opacidad),
-  idioma ES/EN, tour de bienvenida.
+## Features
 
-## Instalación
+- **System**: linear map of scanned bodies (bio in green), biological signals per
+  body, genus checklist with clonal colony distances.
+- **Species prediction**: when you scan a body, Artemis crosses its atmosphere,
+  temperature, gravity, class and volcanism against the known conditions of ~90
+  species and tells you what can live there and what it pays — before you land.
+  Automatically narrowed down after the DSS scan.
+- **Online context**: EDSM (virgin system? → possible first discovery) and Canonn
+  (bio already reported by the community) on every jump.
+- **Targets**: Spansh body search for premium species (≥9M cr) near your position,
+  with one-click system copy for plotting.
+- **Route**: plot with Spansh from your current system using your ship's real jump
+  range (read from the journal), copy your build as SLEF for the Galaxy Plotter,
+  import JSON routes, and track progress live (window + overlay) on every jump.
+- **Sampling assistant**: Genetic Sampler-style radial dial with live colony
+  distance from Status.json, plus visual and audio cues when you clear the radius.
+- **Surface mini-map**: breadcrumb trail of your walk, sample positions ①②,
+  to-scale colony radius circle and your heading — overlay and window.
+- **Discord feed**: paste your squadron's webhook and Artemis posts your new
+  variants, legendary samples and each session summary.
+- **Discord Rich Presence**: your profile shows live what you are exploring and
+  sampling (requires creating a free app on the Discord developer portal and
+  pasting its ID).
+- **Wallet**: unsold value, death-loss warning, first logged (x5) estimation.
+- **Collection**: flora Pokédex — the full species catalog with rarity (common →
+  legendary glow), every color variant you collect with date and place, and a HUD
+  effect + sound when you scan a variant you don't own yet.
+- **Library**: permanent, searchable record of everything you have sampled, with
+  CSV export and first logged confirmed on sale (✪).
+- **Statistics**: credits per day (30 days), collection completion by genus,
+  records (best day, top species, confirmed first logged, lifetime total).
+- **System tray**: minimizing hides to the tray; quick menu with overlay and quit.
+- **Backup**: export/import your entire collection (imports merge without losing
+  anything).
+- **Windows notifications**: jackpot detected, legendary sample, new variant and
+  session summary (can be disabled).
+- **Sound alerts**: sample completed, jackpot fanfare (≥15M), colony radius
+  cleared, low fuel. Synthesized — no audio files.
+- **Inara**: CMDR profile with ranks and progress (personal API key).
+- **Overlay** always on top (`Ctrl+Alt+O` show/hide, `Ctrl+Alt+M` click-through)
+  plus a full window. Customizable theme (accent color, opacity), ES/EN language,
+  welcome tour.
 
-Descarga `Artemis-Setup-<versión>.exe` desde
-[Releases](https://github.com/AvatarGamer10/artemis-exobio/releases) y ejecútalo.
-Instalación de un clic; no requiere Node.
+## Installation
 
-La app comprueba al arrancar si hay una versión nueva en Releases y ofrece
-descargarla e instalarla automáticamente.
+Download `Artemis-Setup-<version>.exe` from
+[Releases](https://github.com/AvatarGamer10/artemis-exobio/releases) and run it.
+One-click install; no Node required.
 
-## Desarrollo
+On startup the app checks Releases for a newer version and offers to download and
+install it automatically.
+
+> Windows SmartScreen may warn because the installer is unsigned: choose
+> "More info → Run anyway".
+
+## Development
 
 ```
 npm install
-npm run dev        # arranca la app
-npm run simulate   # genera un journal falso en sim-journal/ para probar sin el juego
+npm run dev        # start the app
+npm run simulate   # generate a fake journal in sim-journal/ to test without the game
 ```
 
-Con `npm run dev` activo, `http://localhost:5173/index.html` muestra la UI con datos
-de ejemplo en un navegador normal (añade `?tour=1` para ver el asistente de bienvenida).
+With `npm run dev` running, `http://localhost:5173/index.html` renders the UI with
+demo data in a regular browser (add `?tour=1` to preview the welcome tour).
 
-## Instalador
+## Installer
 
 ```
 npm run dist
 ```
 
-Genera `dist/Artemis-Setup-<versión>.exe` (NSIS, sin firma).
+Produces `dist/Artemis-Setup-<version>.exe` (NSIS, unsigned).
 
-## Notas
+## Notes
 
-- El overlay requiere el juego en modo **Borderless**, no pantalla completa exclusiva.
-- Los valores de especies y las reglas de predicción provienen de datos de la
-  comunidad (Canonn/Bioforge/Spansh) y son estimaciones.
-- El "first footfall" real no está disponible en ninguna API pública; el proxy usado
-  es "sistema sin registrar en EDSM".
+- The overlay requires the game in **Borderless** mode, not exclusive fullscreen.
+- Species values and prediction rules come from community data
+  (Canonn/Bioforge/Spansh) and are estimates.
+- Real "first footfall" is not available from any public API; the proxy used is
+  "system not present on EDSM".
+
+## Acknowledgements
+
+Artemis stands on the shoulders of the Elite Dangerous community:
+[EDSM](https://www.edsm.net), [Canonn Research](https://canonn.science),
+[Spansh](https://spansh.co.uk) and [Inara](https://inara.cz). Thank you for
+keeping the galaxy mapped. o7
