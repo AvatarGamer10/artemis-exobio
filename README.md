@@ -4,7 +4,7 @@ Desktop app (Electron + React) that reads the Elite Dangerous: Odyssey journal i
 real time and assists you through the entire exobiology loop, with an in-game
 overlay for playing and a full window for planning.
 
-![version](https://img.shields.io/badge/version-0.12.0-orange) ![platform](https://img.shields.io/badge/platform-Windows-blue)
+![version](https://img.shields.io/badge/version-0.13.0-orange) ![platform](https://img.shields.io/badge/platform-Windows-blue)
 
 🇪🇸 [Léeme en español](README.es.md)
 

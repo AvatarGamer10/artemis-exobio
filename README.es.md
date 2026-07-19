@@ -4,7 +4,7 @@ App de escritorio (Electron + React) que lee el journal de Elite Dangerous: Odys
 tiempo real y te asiste en todo el flujo de exobiología, con overlay para jugar y
 ventana completa para planificar.
 
-![version](https://img.shields.io/badge/version-0.12.0-orange) ![platform](https://img.shields.io/badge/platform-Windows-blue)
+![version](https://img.shields.io/badge/version-0.13.0-orange) ![platform](https://img.shields.io/badge/platform-Windows-blue)
 
 🇬🇧 [Read in English](README.md)
 

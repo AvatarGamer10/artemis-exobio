@@ -119,6 +119,7 @@ export default function GalaxyMap({ state, t, onPlotTo }) {
   }
 
   const onMouseDown = (e) => {
+    if (e.button !== 0) return // solo botón izquierdo
     drag.current = { ...svgPoint(e), wx: view.wx, wy: view.wy, moved: false }
   }
   const onMouseMove = (e) => {
@@ -134,6 +135,7 @@ export default function GalaxyMap({ state, t, onPlotTo }) {
     }
   }
   const onMouseUp = async (e) => {
+    if (e.button !== 0) return
     const wasDrag = drag.current?.moved
     drag.current = null
     if (wasDrag) return
@@ -183,6 +185,7 @@ export default function GalaxyMap({ state, t, onPlotTo }) {
           onMouseDown={onMouseDown}
           onMouseMove={onMouseMove}
           onMouseUp={onMouseUp}
+          onContextMenu={(e) => e.preventDefault()}
           onMouseLeave={() => {
             drag.current = null
             setHover(null)

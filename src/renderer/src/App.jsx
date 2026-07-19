@@ -8,6 +8,7 @@ import Targets from './components/Targets.jsx'
 import RoutePanel from './components/RoutePanel.jsx'
 import Stats from './components/Stats.jsx'
 import GalaxyMap from './components/GalaxyMap.jsx'
+import Splash from './components/Splash.jsx'
 import VaultPanel from './components/VaultPanel.jsx'
 import Library from './components/Library.jsx'
 import Collection from './components/Collection.jsx'
@@ -49,6 +50,8 @@ export default function App() {
   const state = useArtemis()
   const [tab, setTab] = useState('sistema')
   const [routeDest, setRouteDest] = useState(null)
+  // La pantalla de inicio solo en el arranque real (no al recargar en el navegador demo)
+  const [booting, setBooting] = useState(!window.location.search.includes('nosplash'))
   const lang = state?.settings?.lang || 'es'
   const t = useT(lang)
   useTheme(state?.settings?.theme)
@@ -60,6 +63,7 @@ export default function App() {
 
   return (
     <div className="app">
+      {booting && <Splash lang={lang} onDone={() => setBooting(false)} />}
       {!state.settings.onboarded && <Onboarding lang={lang} />}
       {state.settings.onboarded && <UpdateModal update={state.update} t={t} />}
 
