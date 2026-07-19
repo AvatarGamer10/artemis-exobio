@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { IconRadar, IconSync, IconFolder, IconX, IconExternal, IconCheck } from '../Icons.jsx'
 
 function ShipPanel({ state, t }) {
@@ -49,12 +49,17 @@ function ShipPanel({ state, t }) {
   )
 }
 
-function Plotter({ state, t }) {
-  const [to, setTo] = useState('')
+function Plotter({ state, t, prefillDest }) {
+  const [to, setTo] = useState(prefillDest || '')
   const [range, setRange] = useState('')
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState(null)
   const shipRange = state.ship?.maxJumpRange
+
+  // Destino que llega desde la Carta Galáctica ("Plotear hasta aquí")
+  useEffect(() => {
+    if (prefillDest) setTo(prefillDest)
+  }, [prefillDest])
 
   const plot = async () => {
     if (!to.trim()) return
@@ -199,11 +204,11 @@ function ActiveRoute({ state, t }) {
   )
 }
 
-export default function RoutePanel({ state, t }) {
+export default function RoutePanel({ state, t, prefillDest }) {
   return (
     <>
       <ActiveRoute state={state} t={t} />
-      <Plotter state={state} t={t} />
+      <Plotter state={state} t={t} prefillDest={prefillDest} />
       <ShipPanel state={state} t={t} />
     </>
   )

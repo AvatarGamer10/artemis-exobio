@@ -4,7 +4,7 @@ App de escritorio (Electron + React) que lee el journal de Elite Dangerous: Odys
 tiempo real y te asiste en todo el flujo de exobiología, con overlay para jugar y
 ventana completa para planificar.
 
-![version](https://img.shields.io/badge/version-0.11.0-orange) ![platform](https://img.shields.io/badge/platform-Windows-blue)
+![version](https://img.shields.io/badge/version-0.12.0-orange) ![platform](https://img.shields.io/badge/platform-Windows-blue)
 
 🇬🇧 [Read in English](README.md)
 
@@ -19,6 +19,10 @@ ventana completa para planificar.
   (bio ya reportada por la comunidad) en cada salto.
 - **Objetivos**: buscador Spansh de cuerpos con especies premium (≥9M cr) cerca de tu
   posición, con botón para copiar el sistema y plotear.
+- **Carta Galáctica**: mapa interactivo de toda la galaxia dividido en las 42
+  regiones del juego, con zoom/pan, tu posición en vivo e hitos. Haz clic en
+  cualquier punto — aunque no haya nada registrado — y obtén los sistemas
+  conocidos más cercanos, listos para plotear.
 - **Ruta**: plotea con Spansh desde tu sistema actual usando el rango real de tu nave
   (leído del journal), copia tu build en SLEF para el Galaxy Plotter, importa rutas
   en JSON, y sigue el progreso en vivo (ventana + overlay) con cada salto.
@@ -93,5 +97,7 @@ Genera `dist/Artemis-Setup-<versión>.exe` (NSIS, sin firma).
 
 Artemis se apoya en los hombros de la comunidad de Elite Dangerous:
 [EDSM](https://www.edsm.net), [Canonn Research](https://canonn.science),
-[Spansh](https://spansh.co.uk) e [Inara](https://inara.cz). Gracias por mantener
-la galaxia cartografiada. o7
+[Spansh](https://spansh.co.uk) e [Inara](https://inara.cz). Límites de regiones
+galácticas de
+[klightspeed/EliteDangerousRegionMap](https://github.com/klightspeed/EliteDangerousRegionMap)
+(MIT). Gracias por mantener la galaxia cartografiada. o7

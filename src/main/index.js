@@ -16,7 +16,13 @@ import path from 'node:path'
 import { JournalWatcher, defaultJournalDir } from './journal.js'
 import { createGameState, applyJournalEvent, applyStatus, vaultValue } from './state.js'
 import { getCommanderProfile } from './inara.js'
-import { edsmSystem, canonnSystemPoi, spanshSearchSpecies, spanshPlotRoute } from './apis.js'
+import {
+  edsmSystem,
+  canonnSystemPoi,
+  spanshSearchSpecies,
+  spanshPlotRoute,
+  spanshNearestSystems
+} from './apis.js'
 import { checkLatest, downloadAndInstall } from './updater.js'
 import { postDiscord, sampleEmbed, sessionEmbed, testEmbed } from './discord.js'
 import { DiscordRPC } from './rpc.js'
@@ -195,9 +201,14 @@ function updateRpc(force = false) {
 // Feed de Discord (webhook del escuadrón): variantes nuevas, legendarias y sesiones
 function discordPost(embed) {
   const cfg = store.discord
-  if (!cfg?.webhook || cfg.enabled === false) return
+  if (!cfg?.webhook || cfg.enabled === false) {
+    if (process.env.ARTEMIS_DEBUG) console.log('[discord] omitido: sin webhook o feed OFF')
+    return
+  }
+  if (process.env.ARTEMIS_DEBUG) console.log('[discord] publicando:', embed.title)
   postDiscord(cfg.webhook, embed).then((r) => {
-    if (!r.ok) console.error('[discord]', r.error)
+    if (!r.ok) console.error('[discord] fallo:', r.error)
+    else if (process.env.ARTEMIS_DEBUG) console.log('[discord] entregado ✓')
   })
 }
 
@@ -535,6 +546,7 @@ app.whenReady().then(() => {
   ipcMain.handle('targets:search', (_e, species) =>
     spanshSearchSpecies(species, state.system.name || 'Sol')
   )
+  ipcMain.handle('map:nearest', (_e, { x, y, z }) => spanshNearestSystems(x, y ?? 0, z))
   // ── Sistema de rutas (ROUTE update) ──
   ipcMain.handle('route:plot', async (_e, { to, range, efficiency }) => {
     const from = state.system.name

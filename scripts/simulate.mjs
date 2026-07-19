@@ -101,7 +101,9 @@ async function main() {
 
   write({ event: 'Embark', OnPlanet: true })
   write({ event: 'LeaveBody', StarSystem: 'Prestige BIO-1', Body: 'Prestige BIO-1 c 3' })
-  console.log('\nSimulación terminada. Deja la app abierta para inspeccionarla.')
+  await sleep(1500)
+  write({ event: 'Shutdown' })
+  console.log('\nSimulación terminada (con Shutdown: dispara resumen de sesión + Discord).')
 }
 
 main()

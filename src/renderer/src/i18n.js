@@ -8,6 +8,7 @@ const dict = {
     close: 'Cerrar',
     navSystem: 'Sistema',
     navTargets: 'Objetivos',
+    navChart: 'Carta',
     navRoute: 'Ruta',
     navVault: 'Cartera',
     navDex: 'Colección',
@@ -173,6 +174,14 @@ const dict = {
     presetBio: 'Verde bio',
     presetViolet: 'Violeta',
 
+    chTitle: 'CARTA GALÁCTICA',
+    chHint: 'Haz clic en cualquier punto de la galaxia — aunque no haya nada registrado ahí — y te doy los sistemas conocidos más cercanos para plotear. Rueda = zoom · arrastrar = mover.',
+    chLegend: 'Regiones del juego (datos: klightspeed, MIT) · Sistemas: Spansh · △ tu posición',
+    chNearest: 'SISTEMAS CONOCIDOS MÁS CERCANOS',
+    chSearching: 'Consultando Spansh…',
+    chPlot: 'Plotear',
+    chYou: 'TÚ',
+
     rtShip: 'TU NAVE',
     rtNoShip: 'Aún no he visto tu nave en el journal — entra al juego (o cambia de nave) y aparecerá aquí con su rango de salto.',
     rtShipType: 'Nave',
@@ -242,6 +251,8 @@ const dict = {
     setDiscordToggle: (on) => `Feed: ${on ? 'ON' : 'OFF'}`,
     setDiscordTest: 'Enviar prueba',
     setDiscordOk: '✓ Publicado en Discord',
+    setDiscordSaved: 'Webhook guardado',
+    setDiscordNone: 'Webhook sin configurar',
     setDiscordHint: 'Para crear el webhook: en tu servidor de Discord → Ajustes del canal → Integraciones → Webhooks → Nuevo webhook → Copiar URL.',
     smapLegend: '①② muestras · círculo = radio de colonia · △ = tú · ⌀ = ancho del mapa',
 
@@ -283,6 +294,7 @@ const dict = {
     close: 'Close',
     navSystem: 'System',
     navTargets: 'Targets',
+    navChart: 'Chart',
     navRoute: 'Route',
     navVault: 'Wallet',
     navDex: 'Collection',
@@ -448,6 +460,14 @@ const dict = {
     presetBio: 'Bio Green',
     presetViolet: 'Violet',
 
+    chTitle: 'GALAXY CHART',
+    chHint: 'Click anywhere in the galaxy — even where nothing is recorded — and I will give you the nearest known systems to plot to. Wheel = zoom · drag = pan.',
+    chLegend: 'In-game regions (data: klightspeed, MIT) · Systems: Spansh · △ your position',
+    chNearest: 'NEAREST KNOWN SYSTEMS',
+    chSearching: 'Querying Spansh…',
+    chPlot: 'Plot',
+    chYou: 'YOU',
+
     rtShip: 'YOUR SHIP',
     rtNoShip: "I haven't seen your ship in the journal yet — log into the game (or switch ships) and it will show up here with its jump range.",
     rtShipType: 'Ship',
@@ -517,6 +537,8 @@ const dict = {
     setDiscordToggle: (on) => `Feed: ${on ? 'ON' : 'OFF'}`,
     setDiscordTest: 'Send test',
     setDiscordOk: '✓ Posted to Discord',
+    setDiscordSaved: 'Webhook saved',
+    setDiscordNone: 'Webhook not set',
     setDiscordHint: 'To create the webhook: in your Discord server → Channel settings → Integrations → Webhooks → New webhook → Copy URL.',
     smapLegend: '①② samples · circle = colony range · △ = you · ⌀ = map width',
 

@@ -86,6 +86,7 @@ export function applyJournalEvent(state, ev, { live } = { live: true }) {
 
     case 'Location':
       state.system.name = ev.StarSystem
+      state.system.pos = ev.StarPos || state.system.pos
       return true
 
     case 'Loadout':
@@ -107,7 +108,13 @@ export function applyJournalEvent(state, ev, { live } = { live: true }) {
         )
         if (i >= 0) state.route.index = Math.max(state.route.index, i)
       }
-      state.system = { name: ev.StarSystem, bodyCount: null, scanned: 0, allBodiesFound: false }
+      state.system = {
+        name: ev.StarSystem,
+        bodyCount: null,
+        scanned: 0,
+        allBodiesFound: false,
+        pos: ev.StarPos || null
+      }
       state.systemBodies = {}
       state.bioBodies = {}
       state.currentBodyId = null

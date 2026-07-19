@@ -4,7 +4,13 @@ import { useEffect, useState } from 'react'
 // útil para iterar sobre el diseño.
 const DEMO_STATE = {
   commander: { name: 'Mayca', credits: 125000000 },
-  system: { name: 'Prestige BIO-1', bodyCount: 9, scanned: 9, allBodiesFound: true },
+  system: {
+    name: 'Prestige BIO-1',
+    bodyCount: 9,
+    scanned: 9,
+    allBodiesFound: true,
+    pos: [-81.8, -149.4, -343.4]
+  },
   systemBodies: {
     0: { id: 0, name: 'Prestige BIO-1 A', star: 'K', planetClass: null, landable: false, distLs: 0 },
     2: { id: 2, name: 'Prestige BIO-1 b 1', star: null, planetClass: 'High metal content body', landable: false, distLs: 210 },

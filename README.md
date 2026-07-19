@@ -4,7 +4,7 @@ Desktop app (Electron + React) that reads the Elite Dangerous: Odyssey journal i
 real time and assists you through the entire exobiology loop, with an in-game
 overlay for playing and a full window for planning.
 
-![version](https://img.shields.io/badge/version-0.11.0-orange) ![platform](https://img.shields.io/badge/platform-Windows-blue)
+![version](https://img.shields.io/badge/version-0.12.0-orange) ![platform](https://img.shields.io/badge/platform-Windows-blue)
 
 🇪🇸 [Léeme en español](README.es.md)
 
@@ -20,6 +20,9 @@ overlay for playing and a full window for planning.
   (bio already reported by the community) on every jump.
 - **Targets**: Spansh body search for premium species (≥9M cr) near your position,
   with one-click system copy for plotting.
+- **Galaxy Chart**: interactive map of the whole galaxy divided into the 42 in-game
+  regions, with zoom/pan, your live position and landmarks. Click anywhere — even
+  where nothing is recorded — and get the nearest known systems, ready to plot.
 - **Route**: plot with Spansh from your current system using your ship's real jump
   range (read from the journal), copy your build as SLEF for the Galaxy Plotter,
   import JSON routes, and track progress live (window + overlay) on every jump.
@@ -95,5 +98,7 @@ Produces `dist/Artemis-Setup-<version>.exe` (NSIS, unsigned).
 
 Artemis stands on the shoulders of the Elite Dangerous community:
 [EDSM](https://www.edsm.net), [Canonn Research](https://canonn.science),
-[Spansh](https://spansh.co.uk) and [Inara](https://inara.cz). Thank you for
-keeping the galaxy mapped. o7
+[Spansh](https://spansh.co.uk) and [Inara](https://inara.cz). Galaxy region
+boundaries from
+[klightspeed/EliteDangerousRegionMap](https://github.com/klightspeed/EliteDangerousRegionMap)
+(MIT). Thank you for keeping the galaxy mapped. o7

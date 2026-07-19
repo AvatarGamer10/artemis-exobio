@@ -161,11 +161,21 @@ export default function SettingsPanel({ state, t }) {
         <label className="hud">
           <IconFolder size={15} /> {t('setJournal')}
         </label>
-        <input className="hud" value={journalDir} onChange={(e) => setJournalDir(e.target.value)} />
+        <input
+          className="hud"
+          value={journalDir}
+          onChange={(e) => setJournalDir(e.target.value)}
+          onBlur={() => window.artemis.setSettings({ journalDir })}
+        />
         <label className="hud">
           <IconUser size={15} /> {t('setCmdr')}
         </label>
-        <input className="hud" value={cmdrName} onChange={(e) => setCmdrName(e.target.value)} />
+        <input
+          className="hud"
+          value={cmdrName}
+          onChange={(e) => setCmdrName(e.target.value)}
+          onBlur={() => window.artemis.setSettings({ cmdrName })}
+        />
         <label className="hud">
           <IconKey size={15} /> {t('setKey')}
         </label>
@@ -174,6 +184,7 @@ export default function SettingsPanel({ state, t }) {
           value={inaraKey}
           placeholder={t('setKeyPh')}
           onChange={(e) => setInaraKey(e.target.value)}
+          onBlur={() => window.artemis.setSettings({ inaraKey })}
         />
         <div style={{ marginTop: 18, display: 'flex', gap: 12, alignItems: 'center' }}>
           <button className="hud" onClick={save}>
@@ -227,11 +238,13 @@ export default function SettingsPanel({ state, t }) {
           value={webhook}
           placeholder={t('setDiscordPh')}
           onChange={(e) => setWebhook(e.target.value)}
+          onBlur={() => window.artemis.setSettings({ discord: { webhook } })}
         />
         <div style={{ marginTop: 14, display: 'flex', gap: 12, alignItems: 'center', flexWrap: 'wrap' }}>
-          <button className="hud" onClick={save}>
-            <IconSave size={17} /> {t('setSave')}
-          </button>
+          <span className="chip">
+            <span className={`dot ${discord.hasWebhook ? '' : 'off'}`} />
+            {discord.hasWebhook ? t('setDiscordSaved') : t('setDiscordNone')}
+          </span>
           <button
             className={`hud ${discord.enabled ? '' : 'ghost'}`}
             onClick={() => window.artemis.setSettings({ discord: { enabled: !discord.enabled } })}
@@ -260,6 +273,7 @@ export default function SettingsPanel({ state, t }) {
           value={rpcId}
           placeholder={t('setRpcPh')}
           onChange={(e) => setRpcId(e.target.value)}
+          onBlur={() => window.artemis.setSettings({ rpc: { appId: rpcId } })}
         />
         <div style={{ marginTop: 14, display: 'flex', gap: 12, alignItems: 'center', flexWrap: 'wrap' }}>
           <button className="hud" onClick={save}>

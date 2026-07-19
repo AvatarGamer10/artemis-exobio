@@ -7,6 +7,7 @@ import SystemPanel from './components/SystemPanel.jsx'
 import Targets from './components/Targets.jsx'
 import RoutePanel from './components/RoutePanel.jsx'
 import Stats from './components/Stats.jsx'
+import GalaxyMap from './components/GalaxyMap.jsx'
 import VaultPanel from './components/VaultPanel.jsx'
 import Library from './components/Library.jsx'
 import Collection from './components/Collection.jsx'
@@ -21,6 +22,7 @@ import {
   IconRoute,
   IconWallet,
   IconChart,
+  IconGalaxy,
   IconGraph,
   IconUser,
   IconSettings,
@@ -32,6 +34,7 @@ import {
 const TABS = [
   ['sistema', 'navSystem', IconPlanet],
   ['objetivos', 'navTargets', IconRadar],
+  ['carta', 'navChart', IconGalaxy],
   ['ruta', 'navRoute', IconRoute],
   ['cartera', 'navVault', IconWallet],
   ['coleccion', 'navDex', IconLeaf],
@@ -45,6 +48,7 @@ const TABS = [
 export default function App() {
   const state = useArtemis()
   const [tab, setTab] = useState('sistema')
+  const [routeDest, setRouteDest] = useState(null)
   const lang = state?.settings?.lang || 'es'
   const t = useT(lang)
   useTheme(state?.settings?.theme)
@@ -105,7 +109,17 @@ export default function App() {
         <div className="content">
           {tab === 'sistema' && <SystemPanel state={state} t={t} />}
           {tab === 'objetivos' && <Targets state={state} t={t} />}
-          {tab === 'ruta' && <RoutePanel state={state} t={t} />}
+          {tab === 'carta' && (
+            <GalaxyMap
+              state={state}
+              t={t}
+              onPlotTo={(dest) => {
+                setRouteDest(dest)
+                setTab('ruta')
+              }}
+            />
+          )}
+          {tab === 'ruta' && <RoutePanel state={state} t={t} prefillDest={routeDest} />}
           {tab === 'cartera' && <VaultPanel state={state} t={t} />}
           {tab === 'coleccion' && <Collection state={state} t={t} lang={lang} />}
           {tab === 'biblioteca' && <Library state={state} t={t} lang={lang} />}

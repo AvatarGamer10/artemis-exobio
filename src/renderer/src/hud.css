@@ -397,6 +397,33 @@ label.hud {
 .sysmap .current-ring { fill: none; stroke: var(--hi); stroke-width: 1.5; stroke-dasharray: 4 3; }
 .map-legend { margin-top: 8px; }
 
+/* ── Carta Galáctica ── */
+.gmap-svg { cursor: crosshair; border: 1px solid var(--hairline); background: rgba(0, 0, 0, 0.4); display: block; }
+.gmap-svg:active { cursor: grabbing; }
+.gmap-hoverinfo {
+  margin-left: auto; font-family: var(--mono); font-size: 11px;
+  letter-spacing: 0.5px; color: var(--cyan); text-transform: none;
+}
+.gmap-region-label {
+  fill: rgba(242, 236, 223, 0.5); font-family: var(--display);
+  font-size: 10px; letter-spacing: 2px; pointer-events: none;
+}
+.gmap-landmark { fill: var(--hi); }
+.gmap-landmark-label {
+  fill: var(--ink-dim); font-family: var(--mono); font-size: 10px; pointer-events: none;
+}
+.gmap-landmark-label.you { fill: var(--good); font-weight: 700; }
+.gmap-you { fill: var(--good); }
+.gmap-you-pulse { fill: none; stroke: var(--good); stroke-width: 1.5; opacity: 0.6; }
+@media (prefers-reduced-motion: no-preference) {
+  .gmap-you-pulse { animation: you-pulse 2s ease-out infinite; }
+}
+@keyframes you-pulse {
+  from { r: 6; opacity: 0.7; }
+  to { r: 16; opacity: 0; }
+}
+.gmap-pick line { stroke: var(--hi); stroke-width: 2; }
+
 /* ── Predicción: catálogo con puntos de guía ── */
 .pred-block { margin-top: 12px; padding-top: 10px; border-top: 1px solid var(--card-line); }
 .pred-head {

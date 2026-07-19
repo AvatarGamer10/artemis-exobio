@@ -47,6 +47,40 @@ export async function canonnSystemPoi(systemName, cmdrName) {
   }
 }
 
+// Spansh: sistemas conocidos más cercanos a unas coordenadas galácticas crudas.
+// La clave de la Carta Galáctica: clic en cualquier punto → destinos ploteables.
+export async function spanshNearestSystems(x, y, z, size = 8) {
+  try {
+    const data = await getJson(
+      'https://spansh.co.uk/api/systems/search',
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          filters: {},
+          sort: [{ distance: { direction: 'asc' } }],
+          size,
+          reference_coords: { x, y, z }
+        })
+      },
+      30000
+    )
+    return {
+      ok: true,
+      results: (data?.results || []).map((r) => ({
+        name: r.name,
+        distance: r.distance != null ? Math.round(r.distance * 10) / 10 : null,
+        region: r.region || null,
+        x: r.x,
+        y: r.y,
+        z: r.z
+      }))
+    }
+  } catch (e) {
+    return { ok: false, error: String(e.message || e) }
+  }
+}
+
 // Spansh: ploteo de ruta (galaxy/neutron plotter). Devuelve la lista de saltos.
 export async function spanshPlotRoute(from, to, range, efficiency = 60) {
   try {

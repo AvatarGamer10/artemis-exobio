@@ -151,6 +151,13 @@ export const IconWalk = (p) => (
   </I>
 )
 
+export const IconGalaxy = (p) => (
+  <I {...p}>
+    <circle cx="12" cy="12" r="1.6" fill="currentColor" stroke="none" />
+    <path d="M12 12c0-4.5 3.5-7.5 8-7.5M12 12c0 4.5-3.5 7.5-8 7.5M12 12c4.5 0 7.5 3.5 7.5 8M12 12c-4.5 0-7.5-3.5-7.5-8" />
+  </I>
+)
+
 export const IconGraph = (p) => (
   <I {...p}>
     <path d="M3 4v16h18" />
