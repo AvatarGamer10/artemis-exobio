@@ -106,7 +106,7 @@ function Plotter({ state, t, prefillDest }) {
         onChange={(e) => setRange(e.target.value.replace(',', '.'))}
       />
       <div style={{ marginTop: 16, display: 'flex', gap: 12, alignItems: 'center', flexWrap: 'wrap' }}>
-        <button className="hud" onClick={plot} disabled={busy || !to.trim()}>
+        <button className="hud primary" onClick={plot} disabled={busy || !to.trim()}>
           <IconSync size={16} /> {busy ? t('rtPlotting') : t('rtPlotBtn')}
         </button>
         <button className="hud ghost" onClick={() => window.artemis.importRoute()}>

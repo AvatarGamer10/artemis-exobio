@@ -187,7 +187,7 @@ export default function SettingsPanel({ state, t }) {
           onBlur={() => window.artemis.setSettings({ inaraKey })}
         />
         <div style={{ marginTop: 18, display: 'flex', gap: 12, alignItems: 'center' }}>
-          <button className="hud" onClick={save}>
+          <button className="hud primary" onClick={save}>
             <IconSave size={17} /> {t('setSave')}
           </button>
           {saved && <span className="v good">{t('setSaved')}</span>}
@@ -276,7 +276,7 @@ export default function SettingsPanel({ state, t }) {
           onBlur={() => window.artemis.setSettings({ rpc: { appId: rpcId } })}
         />
         <div style={{ marginTop: 14, display: 'flex', gap: 12, alignItems: 'center', flexWrap: 'wrap' }}>
-          <button className="hud" onClick={save}>
+          <button className="hud primary" onClick={save}>
             <IconSave size={17} /> {t('setSave')}
           </button>
           <button

@@ -363,58 +363,112 @@ td .species, tr td:first-child { font-size: 13px; }
 .smap .player { fill: var(--hi); }
 .smap .scale-label { fill: var(--ink-dim); font-family: var(--mono); font-size: 8px; }
 
-/* ── Botones: instrumento, esquina recortada ── */
+/* ── Controles ────────────────────────────────────────────────────
+   Jerarquía en tres pesos: .primary (acción principal, relleno),
+   .hud a secas (secundaria, contorno) y .ghost (terciaria, sin caja).
+   Altura común de 38px para que botones y campos se alineen. */
 button.hud {
-  display: inline-flex; align-items: center; justify-content: center; gap: 10px;
-  padding: 12px 22px;
+  position: relative;
+  display: inline-flex; align-items: center; justify-content: center; gap: 9px;
+  min-height: 38px; padding: 0 20px;
   border: 1px solid var(--line);
-  background: var(--soft);
+  background: linear-gradient(180deg, var(--soft), var(--soft2));
   color: var(--hi);
-  font-family: var(--display); font-size: 12px; font-weight: 600;
-  letter-spacing: 2.5px; text-transform: uppercase;
+  font-family: var(--display); font-size: 11.5px; font-weight: 600;
+  letter-spacing: 2px; text-transform: uppercase; white-space: nowrap;
   cursor: pointer;
   clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 0 100%);
-  transition: background var(--t-fast) var(--ease-soft), color var(--t-fast) var(--ease-soft),
-    transform var(--t-fast) var(--ease-soft), box-shadow var(--t-mid) var(--ease-soft);
+  transition: background var(--t-fast) var(--ease-soft), border-color var(--t-fast) var(--ease-soft),
+    color var(--t-fast) var(--ease-soft), transform var(--t-fast) var(--ease-soft),
+    box-shadow var(--t-mid) var(--ease-soft);
 }
-button.hud:hover { background: var(--accent); color: #17110a; box-shadow: 0 0 22px var(--soft); }
-button.hud:active { transform: scale(0.97); }
+button.hud svg { flex: none; opacity: 0.9; }
+/* filo de luz superior: da cuerpo sin caer en el relieve falso */
+button.hud::after {
+  content: '';
+  position: absolute; left: 0; right: 10px; top: 0; height: 1px;
+  background: linear-gradient(90deg, var(--line), transparent 70%);
+  pointer-events: none;
+}
+button.hud:hover {
+  border-color: var(--accent);
+  background: linear-gradient(180deg, var(--soft), var(--soft));
+  color: var(--ink);
+}
+button.hud:active { transform: translateY(1px); }
+button.hud:disabled {
+  opacity: 0.4; cursor: not-allowed; border-color: var(--card-line);
+  background: none; box-shadow: none; transform: none;
+}
+
+/* Principal: la acción que el panel quiere que pulses */
+button.hud.primary {
+  border-color: var(--accent);
+  background: linear-gradient(180deg, var(--hi), var(--accent));
+  color: #17110a; font-weight: 700;
+  box-shadow: 0 2px 14px var(--soft);
+}
+button.hud.primary::after { background: linear-gradient(90deg, rgba(255, 255, 255, 0.45), transparent 70%); }
+button.hud.primary:hover { box-shadow: 0 3px 20px var(--soft); filter: brightness(1.08); color: #17110a; }
+button.hud.primary:disabled { filter: none; box-shadow: none; }
+
+/* Terciaria */
+button.hud.ghost { background: none; border-color: var(--card-line); color: var(--ink-dim); }
+button.hud.ghost::after { display: none; }
+button.hud.ghost:hover { background: var(--soft2); border-color: var(--line); color: var(--ink); }
+
+/* Destructiva */
+button.hud.danger { color: var(--bad); border-color: rgba(255, 123, 123, 0.4); background: rgba(255, 123, 123, 0.07); }
+button.hud.danger::after { background: linear-gradient(90deg, rgba(255, 123, 123, 0.4), transparent 70%); }
+button.hud.danger:hover { background: rgba(255, 123, 123, 0.16); border-color: var(--bad); color: #ffd2d2; }
+
 button.hud:focus-visible, .sidebar button:focus-visible, button.mini:focus-visible,
 .swatch:focus-visible, .langbtn:focus-visible, .winbtns button:focus-visible,
 input.hud:focus-visible, select.hud:focus-visible {
   outline: 2px solid var(--hi); outline-offset: 2px;
 }
-button.hud:disabled { opacity: 0.5; cursor: default; }
-button.hud.ghost { background: none; }
-button.hud.danger { color: var(--bad); border-color: rgba(255, 123, 123, 0.45); background: rgba(255, 123, 123, 0.08); }
-button.hud.danger:hover { background: var(--bad); color: #1a0202; }
 
 button.mini {
-  padding: 5px 13px;
+  min-height: 26px; padding: 0 12px;
+  display: inline-flex; align-items: center; gap: 6px;
   border: 1px solid var(--card-line);
   background: var(--soft2);
-  color: var(--hi);
+  color: var(--ink-dim);
   font-family: var(--display); font-size: 10px; font-weight: 600;
-  letter-spacing: 1.5px; text-transform: uppercase; cursor: pointer;
+  letter-spacing: 1.5px; text-transform: uppercase; cursor: pointer; white-space: nowrap;
   clip-path: polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 0 100%);
-  transition: all 0.15s;
+  transition: background var(--t-fast) var(--ease-soft), color var(--t-fast) var(--ease-soft),
+    border-color var(--t-fast) var(--ease-soft);
 }
-button.mini:hover { background: var(--accent); color: #17110a; }
+button.mini:hover { background: var(--soft); border-color: var(--line); color: var(--hi); }
+button.mini:active { transform: translateY(1px); }
 
 /* campos de cuaderno: subrayado, no caja */
 input.hud, select.hud {
-  background: rgba(0, 0, 0, 0.25);
-  border: none;
+  min-height: 38px;
+  background: rgba(0, 0, 0, 0.28);
+  border: 1px solid transparent;
   border-bottom: 1px solid var(--line);
   color: var(--ink);
   font-family: var(--mono); font-size: 13px;
-  padding: 11px 12px; width: 100%;
-  transition: border-color 0.15s, background 0.15s;
+  padding: 0 13px; width: 100%;
+  transition: border-color var(--t-fast) var(--ease-soft), background var(--t-fast) var(--ease-soft);
 }
+input.hud::placeholder { color: var(--ink-dim); opacity: 0.55; }
+input.hud:hover, select.hud:hover { background: rgba(0, 0, 0, 0.38); }
 input.hud:focus, select.hud:focus {
   outline: none; border-bottom-color: var(--accent); background: var(--soft2);
 }
-select.hud { min-width: 340px; width: auto; cursor: pointer; }
+/* flecha propia: la nativa desentona sobre fondo oscuro */
+select.hud {
+  min-width: 340px; width: auto; cursor: pointer;
+  appearance: none; padding-right: 38px;
+  background-image: linear-gradient(45deg, transparent 50%, var(--accent) 50%),
+    linear-gradient(135deg, var(--accent) 50%, transparent 50%);
+  background-position: calc(100% - 19px) 52%, calc(100% - 13px) 52%;
+  background-size: 6px 6px, 6px 6px;
+  background-repeat: no-repeat;
+}
 select.hud option { background: #17110a; color: var(--ink); }
 label.hud {
   display: flex; align-items: center; gap: 8px;
@@ -782,3 +836,47 @@ body.overlay-body { background: transparent; }
   .splash-mark .scan, .splash-mark .leaf-line, .splash-mark .vein { stroke-dashoffset: 0; }
   .splash-mark .leaf-fill, .splash-word, .splash-sub, .splash-line, .splash-status { opacity: 1; }
 }
+
+/* ── Remates ──────────────────────────────────────────────────────
+   Detalles que separan un HUD amateur de un instrumento: cifras de
+   ancho fijo que no bailan al actualizarse, filas que responden,
+   scrollbars discretas y selección con el color de la casa. */
+::selection { background: var(--soft); color: var(--ink); }
+
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-thumb {
+  background: var(--card-line);
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+::-webkit-scrollbar-thumb:hover { background: var(--line); background-clip: padding-box; }
+::-webkit-scrollbar-corner { background: transparent; }
+
+/* Cifras de ancho fijo: los contadores en vivo dejan de temblar */
+.stat .n, .kv .v, td.num, .ov-footer, .chip, .grow-count,
+.dial .dist, .smap .scale-label, .gmap-hoverinfo {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: 'tnum' 1;
+}
+
+/* Tablas: ritmo y respuesta */
+th {
+  padding: 9px 10px;
+  background: linear-gradient(180deg, var(--soft2), transparent);
+}
+tbody tr { transition: background var(--t-fast) var(--ease-soft); }
+tbody tr:hover { background: var(--soft2); }
+tbody tr:last-child td { border-bottom: none; }
+
+/* Controles de apariencia a la misma altura que botones y campos */
+.swatch, .langbtn { min-height: 38px; }
+.swatch:active, .langbtn:active { transform: translateY(1px); }
+input[type='color'].colorpick { height: 38px; }
+
+/* Etiquetas de campo: un poco más de aire respecto al control */
+label.hud { margin: 20px 0 8px; }
+label.hud:first-of-type { margin-top: 6px; }
+
+/* Enlaces */
+a { color: var(--cyan); text-decoration-color: var(--card-line); text-underline-offset: 3px; }
+a:hover { text-decoration-color: var(--cyan); }

@@ -36,7 +36,7 @@ export default function UpdateModal({ update, t }) {
         {update.error && <p className="warn">⚠ {update.error}</p>}
         {!busy && (
           <div className="ob-nav">
-            <button className="hud" onClick={() => window.artemis.updateDownload()}>
+            <button className="hud primary" onClick={() => window.artemis.updateDownload()}>
               {t('updNow')}
             </button>
             <button className="hud ghost" onClick={() => setHidden(true)}>

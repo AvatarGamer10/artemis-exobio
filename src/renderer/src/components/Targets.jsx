@@ -65,7 +65,7 @@ export default function Targets({ state, t }) {
               </option>
             ))}
           </select>
-          <button className="hud" onClick={search} disabled={busy}>
+          <button className="hud primary" onClick={search} disabled={busy}>
             <IconSync size={17} /> {busy ? t('tgSearching') : t('tgSearch')}
           </button>
         </div>

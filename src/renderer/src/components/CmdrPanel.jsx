@@ -79,7 +79,7 @@ export default function CmdrPanel({ state, t, lang }) {
         )}
         {error && <div className="warn" style={{ marginTop: 10 }}>⚠ {error}</div>}
         <div style={{ marginTop: 14 }}>
-          <button className="hud" onClick={refresh} disabled={busy}>
+          <button className="hud primary" onClick={refresh} disabled={busy}>
             <IconSync size={17} /> {busy ? t('inaraSyncing') : t('inaraSync')}
           </button>
         </div>
