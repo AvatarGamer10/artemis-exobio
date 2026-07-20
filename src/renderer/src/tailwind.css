@@ -79,32 +79,51 @@
     background: var(--bg);
   }
 
-  /* ── Barra de título ── */
-  .titlebar {
-    @apply flex items-center gap-3 px-4 py-3 border-b border-zinc-800/80;
+  /* ── Barra superior ── */
+  .topbar {
+    @apply flex items-center gap-3 px-3 py-2.5 border-b border-zinc-800/80;
     -webkit-app-region: drag;
   }
-  .titlebar .logo {
-    @apply w-8 h-8 rounded-lg grid place-items-center;
+  .topbar-brand {
+    @apply flex items-center gap-2.5;
+  }
+  .topbar .logo {
+    @apply w-7 h-7 rounded-lg grid place-items-center;
     background: var(--soft);
     color: var(--accent);
   }
-  .titlebar h1 {
-    @apply text-[15px] font-semibold tracking-tight text-zinc-50;
+  .topbar h1 {
+    @apply text-sm font-semibold tracking-tight text-zinc-50;
   }
-  .titlebar .sub {
-    @apply text-[11px] text-zinc-500 font-medium;
+  .topbar-crumb {
+    @apply flex items-center gap-2 text-sm font-medium text-zinc-400;
   }
-  .titlebar .spacer {
+  .crumb-sep {
+    @apply text-zinc-700;
+  }
+  .topbar .spacer {
     @apply flex-1;
   }
+  .titlebar,
   .ruler {
     @apply hidden;
   }
 
+  /* Disparador de la paleta: el buscador global vive en la barra */
+  .cmdk-trigger {
+    @apply inline-flex items-center gap-2 h-8 pl-3 pr-2 rounded-md border border-zinc-800
+      bg-zinc-900/70 text-xs text-zinc-500 cursor-pointer transition-colors
+      hover:border-zinc-700 hover:text-zinc-300;
+    -webkit-app-region: no-drag;
+  }
+  .cmdk-trigger kbd {
+    @apply rounded border border-zinc-700 bg-zinc-800 px-1.5 py-0.5 text-[10px] font-medium text-zinc-400;
+    font-family: var(--font-mono);
+  }
+
   .chip {
     @apply inline-flex items-center gap-2 rounded-full border border-zinc-800 bg-zinc-900/70
-      px-3 py-1 text-xs font-medium text-zinc-300;
+      px-3 py-1 text-xs font-medium text-zinc-300 whitespace-nowrap;
     font-variant-numeric: tabular-nums;
   }
   .chip .dot {
@@ -120,49 +139,170 @@
   }
 
   .winbtns {
-    @apply flex gap-1.5 ml-2;
+    @apply flex gap-1.5 ml-1;
     -webkit-app-region: no-drag;
   }
   .winbtns button {
-    @apply w-8 h-8 rounded-md grid place-items-center text-zinc-500 border border-transparent
+    @apply w-7 h-7 rounded-md grid place-items-center text-zinc-500 border border-transparent
       cursor-pointer transition-colors hover:bg-zinc-800 hover:text-zinc-200;
   }
   .winbtns button.close {
     @apply hover:bg-red-500/15 hover:text-red-400;
   }
 
-  /* ── Layout ── */
+  /* ── Rail de iconos: secciones agrupadas por momento de uso ── */
   .main {
     @apply flex-1 flex min-h-0;
   }
-  .sidebar {
-    @apply w-56 shrink-0 flex flex-col gap-1 p-3 border-r border-zinc-800/80;
+  .rail {
+    @apply w-14 shrink-0 flex flex-col items-center gap-1 py-3 border-r border-zinc-800/80;
   }
-  .sidebar button {
-    @apply flex items-center gap-3 w-full rounded-md px-3 py-2 text-sm font-medium
-      text-zinc-400 cursor-pointer border-none bg-transparent text-left
-      transition-colors hover:bg-zinc-800/70 hover:text-zinc-100;
+  .rail-group {
+    @apply flex flex-col items-center gap-1 w-full pb-2 mb-1 border-b border-zinc-800/60;
   }
-  .sidebar button.active {
+  .rail-group:last-of-type {
+    @apply border-b-0 pb-0 mb-0;
+  }
+  .rail button {
+    @apply relative w-10 h-10 grid place-items-center rounded-lg border-none bg-transparent
+      text-zinc-500 cursor-pointer transition-colors hover:bg-zinc-800 hover:text-zinc-100;
+  }
+  .rail button.active {
     @apply bg-zinc-800 text-zinc-50;
   }
-  .sidebar button.active svg {
-    color: var(--accent);
+  .rail button.active::before {
+    content: '';
+    @apply absolute -left-3 top-1/2 h-5 w-1 -translate-y-1/2 rounded-r-full;
+    background: var(--accent);
   }
-  .sidebar .push {
+  .rail-tip {
+    @apply pointer-events-none absolute left-[calc(100%+10px)] z-30 whitespace-nowrap rounded-md
+      border border-zinc-700 bg-zinc-900 px-2.5 py-1 text-xs font-medium text-zinc-200 opacity-0
+      shadow-lg transition-opacity;
+  }
+  .rail button:hover .rail-tip {
+    @apply opacity-100;
+  }
+  .rail .push {
     @apply flex-1;
   }
-  .sidebar .hint {
-    @apply px-3 py-2 text-[11px] leading-relaxed text-zinc-500;
-  }
-  .sidebar .hint b {
-    @apply font-medium text-zinc-300;
-    font-family: var(--font-mono);
+  .sidebar {
+    @apply hidden;
   }
 
   .content {
     @apply flex-1 overflow-y-auto p-6 min-w-0;
     scroll-behavior: smooth;
+  }
+
+  /* ── Inicio: tarjetas de estado en vivo ── */
+  .dash-grid {
+    @apply grid gap-4;
+    grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  }
+  .dash-card {
+    @apply flex flex-col rounded-xl border border-zinc-800 bg-zinc-900/40 p-4 text-left
+      cursor-pointer transition-colors hover:border-zinc-700 hover:bg-zinc-900/70;
+  }
+  .dash-wide {
+    grid-column: 1 / -1;
+  }
+  .dash-head {
+    @apply flex items-center gap-2 mb-3 text-[11px] font-semibold uppercase tracking-wide text-zinc-500;
+  }
+  .dash-head svg {
+    color: var(--accent);
+  }
+  .dash-go {
+    @apply ml-auto text-zinc-600 transition-transform;
+  }
+  .dash-card:hover .dash-go {
+    @apply translate-x-0.5 text-zinc-400;
+  }
+  .dash-body {
+    @apply flex-1;
+  }
+  .dash-big {
+    @apply text-xl font-semibold tracking-tight text-zinc-50;
+    font-variant-numeric: tabular-nums;
+  }
+  .dash-mono {
+    font-family: var(--font-mono);
+    @apply text-base;
+  }
+  .dash-sub {
+    @apply mt-1 text-xs text-zinc-500;
+  }
+  .dash-flag {
+    @apply mt-2 text-xs text-green-400;
+  }
+  .dash-row {
+    @apply flex gap-6;
+  }
+  .dash-sampling {
+    @apply flex items-center gap-5 flex-wrap;
+  }
+  .dash-sampling-info {
+    @apply flex-1 min-w-40;
+  }
+  .dash-species {
+    @apply text-lg font-medium text-zinc-50;
+  }
+  .dash-value {
+    @apply mt-2 text-sm;
+    color: var(--hi);
+    font-variant-numeric: tabular-nums;
+  }
+  .dash-bodies {
+    @apply flex flex-col gap-1.5;
+  }
+  .dash-body-row {
+    @apply flex items-center justify-between gap-3 rounded-md px-2 py-1.5 text-sm text-zinc-300
+      bg-zinc-950/40;
+  }
+  .dash-body-meta {
+    @apply text-xs text-zinc-500;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* ── Paleta de comandos ── */
+  .cmdk-backdrop {
+    @apply fixed inset-0 z-[150] flex items-start justify-center bg-zinc-950/70 backdrop-blur-sm pt-[12vh];
+    animation: fade-in-fast 0.15s ease both;
+  }
+  .cmdk {
+    @apply w-[min(560px,calc(100%-40px))] overflow-hidden rounded-xl border border-zinc-700
+      bg-zinc-900 shadow-2xl;
+    animation: cmdk-in 0.2s var(--ease) both;
+  }
+  .cmdk-input {
+    @apply w-full border-none bg-transparent px-4 py-3.5 text-sm text-zinc-100 outline-none
+      border-b border-zinc-800;
+  }
+  .cmdk-input::placeholder {
+    @apply text-zinc-600;
+  }
+  .cmdk-list {
+    @apply max-h-80 overflow-y-auto p-1.5;
+  }
+  .cmdk-item {
+    @apply flex w-full items-center gap-3 rounded-md px-3 py-2 text-sm text-zinc-300
+      border-none bg-transparent cursor-pointer text-left;
+  }
+  .cmdk-item.sel {
+    @apply bg-zinc-800 text-zinc-50;
+  }
+  .cmdk-item.sel svg {
+    color: var(--accent);
+  }
+  .cmdk-kind {
+    @apply ml-auto text-[10px] uppercase tracking-wide text-zinc-600;
+  }
+  .cmdk-empty {
+    @apply px-3 py-6 text-center text-sm text-zinc-500;
+  }
+  .cmdk-foot {
+    @apply flex gap-4 border-t border-zinc-800 px-4 py-2 text-[10px] text-zinc-600;
   }
 
   /* ── Tarjetas ── */
@@ -663,6 +803,11 @@
 .gmap-pick line { stroke: rgb(250 250 250); stroke-width: 2; }
 
 /* ── Animaciones ── */
+@keyframes fade-in-fast { from { opacity: 0; } to { opacity: 1; } }
+@keyframes cmdk-in {
+  from { opacity: 0; transform: translateY(-8px) scale(0.98); }
+  to { opacity: 1; transform: none; }
+}
 @keyframes card-in {
   from { opacity: 0; transform: translateY(10px); }
   to { opacity: 1; transform: none; }
