@@ -19,6 +19,7 @@ import Onboarding from './components/Onboarding.jsx'
 import UpdateModal from './components/UpdateModal.jsx'
 import Splash from './components/Splash.jsx'
 import CommandPalette from './components/CommandPalette.jsx'
+import LiveFeed from './components/LiveFeed.jsx'
 import {
   IconPlanet,
   IconRadar,
@@ -57,6 +58,8 @@ const GROUPS = [
   ]
 ]
 const ALL = GROUPS.flat()
+// La bitácora acompaña a las vistas de vuelo, no a las de gestión
+const FEED_TABS = new Set(['inicio', 'sistema', 'ruta'])
 
 export default function App() {
   const state = useArtemis()
@@ -202,6 +205,8 @@ export default function App() {
           {tab === 'cmdr' && <CmdrPanel state={state} t={t} lang={lang} />}
           {tab === 'ajustes' && <SettingsPanel state={state} t={t} />}
         </div>
+
+        {FEED_TABS.has(tab) && <LiveFeed state={state} t={t} lang={lang} />}
       </div>
     </div>
   )

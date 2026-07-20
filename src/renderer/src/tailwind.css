@@ -19,16 +19,20 @@
   --soft: color-mix(in srgb, var(--accent) 14%, transparent);
   --soft2: color-mix(in srgb, var(--accent) 8%, transparent);
   --line: color-mix(in srgb, var(--accent) 30%, transparent);
-  --card-line: rgba(63, 63, 70, 0.7); /* zinc-700/70 */
-  --hairline: rgba(39, 39, 42, 0.8); /* zinc-800/80 */
+  --card-line: rgba(51, 65, 85, 0.7); /* slate-700/70 */
+  --hairline: rgba(30, 41, 59, 0.8); /* slate-800/80 */
   --hi: color-mix(in srgb, var(--accent) 78%, white);
-  --ink: #fafafa; /* zinc-50 */
-  --ink-dim: #a1a1aa; /* zinc-400 */
-  --good: #4ade80; /* green-400 */
+  --ink: #f8fafc; /* slate-50 */
+  --ink-dim: #94a3b8; /* slate-400 */
+  --good: #4ade80;
   --good-soft: rgba(74, 222, 128, 0.12);
-  --bad: #f87171; /* red-400 */
-  --cyan: #38bdf8; /* sky-400 */
-  --bg: rgb(9 9 11 / var(--bg-o)); /* zinc-950 */
+  --bad: #f87171;
+  --cyan: #38bdf8;
+  --bg: rgb(15 23 42 / var(--bg-o)); /* slate-900: el navy de la referencia */
+  /* Acentos por categoría, como las tarjetas de colores del mockup */
+  --c-blue: #4f7dff;
+  --c-violet: #8b5cf6;
+  --c-coral: #f87171;
   --display: var(--font-sans);
   --serif: var(--font-sans);
   --mono: var(--font-mono);
@@ -43,7 +47,7 @@
     @apply box-border m-0 p-0;
   }
   body {
-    @apply bg-transparent text-zinc-50 text-sm overflow-hidden select-none;
+    @apply bg-transparent text-slate-50 text-sm overflow-hidden select-none;
     font-family: var(--font-sans);
   }
   #root {
@@ -51,16 +55,16 @@
   }
   ::selection {
     background: var(--soft);
-    @apply text-zinc-50;
+    @apply text-slate-50;
   }
   ::-webkit-scrollbar {
     @apply w-2.5 h-2.5;
   }
   ::-webkit-scrollbar-thumb {
-    @apply bg-zinc-700 rounded-full border-2 border-transparent bg-clip-padding;
+    @apply bg-slate-700 rounded-full border-2 border-transparent bg-clip-padding;
   }
   ::-webkit-scrollbar-thumb:hover {
-    @apply bg-zinc-600 bg-clip-padding;
+    @apply bg-slate-600 bg-clip-padding;
   }
   ::-webkit-scrollbar-track,
   ::-webkit-scrollbar-corner {
@@ -74,14 +78,14 @@
 @layer components {
   /* ── Marco ── */
   .app {
-    @apply h-screen flex flex-col overflow-hidden relative rounded-xl border border-zinc-800
+    @apply h-screen flex flex-col overflow-hidden relative rounded-2xl border border-slate-800
       shadow-2xl backdrop-blur-xl;
     background: var(--bg);
   }
 
   /* ── Barra superior ── */
   .topbar {
-    @apply flex items-center gap-3 px-3 py-2.5 border-b border-zinc-800/80;
+    @apply flex items-center gap-3 px-3 py-2.5 border-b border-slate-800/80;
     -webkit-app-region: drag;
   }
   .topbar-brand {
@@ -93,13 +97,13 @@
     color: var(--accent);
   }
   .topbar h1 {
-    @apply text-sm font-semibold tracking-tight text-zinc-50;
+    @apply text-sm font-semibold tracking-tight text-slate-50;
   }
   .topbar-crumb {
-    @apply flex items-center gap-2 text-sm font-medium text-zinc-400;
+    @apply flex items-center gap-2 text-sm font-medium text-slate-400;
   }
   .crumb-sep {
-    @apply text-zinc-700;
+    @apply text-slate-700;
   }
   .topbar .spacer {
     @apply flex-1;
@@ -111,19 +115,19 @@
 
   /* Disparador de la paleta: el buscador global vive en la barra */
   .cmdk-trigger {
-    @apply inline-flex items-center gap-2 h-8 pl-3 pr-2 rounded-md border border-zinc-800
-      bg-zinc-900/70 text-xs text-zinc-500 cursor-pointer transition-colors
-      hover:border-zinc-700 hover:text-zinc-300;
+    @apply inline-flex items-center gap-2 h-8 pl-3 pr-2 rounded-md border border-slate-800
+      bg-slate-900/70 text-xs text-slate-500 cursor-pointer transition-colors
+      hover:border-slate-700 hover:text-slate-300;
     -webkit-app-region: no-drag;
   }
   .cmdk-trigger kbd {
-    @apply rounded border border-zinc-700 bg-zinc-800 px-1.5 py-0.5 text-[10px] font-medium text-zinc-400;
+    @apply rounded border border-slate-700 bg-slate-800 px-1.5 py-0.5 text-[10px] font-medium text-slate-400;
     font-family: var(--font-mono);
   }
 
   .chip {
-    @apply inline-flex items-center gap-2 rounded-full border border-zinc-800 bg-zinc-900/70
-      px-3 py-1 text-xs font-medium text-zinc-300 whitespace-nowrap;
+    @apply inline-flex items-center gap-2 rounded-full border border-slate-800 bg-slate-900/70
+      px-3 py-1 text-xs font-medium text-slate-300 whitespace-nowrap;
     font-variant-numeric: tabular-nums;
   }
   .chip .dot {
@@ -132,7 +136,7 @@
     box-shadow: 0 0 8px var(--good);
   }
   .chip .dot.off {
-    @apply bg-zinc-600 shadow-none;
+    @apply bg-slate-600 shadow-none;
   }
   .chip.warn {
     @apply border-red-500/40 text-red-400;
@@ -143,8 +147,8 @@
     -webkit-app-region: no-drag;
   }
   .winbtns button {
-    @apply w-7 h-7 rounded-md grid place-items-center text-zinc-500 border border-transparent
-      cursor-pointer transition-colors hover:bg-zinc-800 hover:text-zinc-200;
+    @apply w-7 h-7 rounded-md grid place-items-center text-slate-500 border border-transparent
+      cursor-pointer transition-colors hover:bg-slate-800 hover:text-slate-200;
   }
   .winbtns button.close {
     @apply hover:bg-red-500/15 hover:text-red-400;
@@ -155,20 +159,20 @@
     @apply flex-1 flex min-h-0;
   }
   .rail {
-    @apply w-14 shrink-0 flex flex-col items-center gap-1 py-3 border-r border-zinc-800/80;
+    @apply w-14 shrink-0 flex flex-col items-center gap-1 py-3 border-r border-slate-800/80;
   }
   .rail-group {
-    @apply flex flex-col items-center gap-1 w-full pb-2 mb-1 border-b border-zinc-800/60;
+    @apply flex flex-col items-center gap-1 w-full pb-2 mb-1 border-b border-slate-800/60;
   }
   .rail-group:last-of-type {
     @apply border-b-0 pb-0 mb-0;
   }
   .rail button {
     @apply relative w-10 h-10 grid place-items-center rounded-lg border-none bg-transparent
-      text-zinc-500 cursor-pointer transition-colors hover:bg-zinc-800 hover:text-zinc-100;
+      text-slate-500 cursor-pointer transition-colors hover:bg-slate-800 hover:text-slate-100;
   }
   .rail button.active {
-    @apply bg-zinc-800 text-zinc-50;
+    @apply bg-slate-800 text-slate-50;
   }
   .rail button.active::before {
     content: '';
@@ -177,7 +181,7 @@
   }
   .rail-tip {
     @apply pointer-events-none absolute left-[calc(100%+10px)] z-30 whitespace-nowrap rounded-md
-      border border-zinc-700 bg-zinc-900 px-2.5 py-1 text-xs font-medium text-zinc-200 opacity-0
+      border border-slate-700 bg-slate-900 px-2.5 py-1 text-xs font-medium text-slate-200 opacity-0
       shadow-lg transition-opacity;
   }
   .rail button:hover .rail-tip {
@@ -201,29 +205,30 @@
     grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
   }
   .dash-card {
-    @apply flex flex-col rounded-xl border border-zinc-800 bg-zinc-900/40 p-4 text-left
-      cursor-pointer transition-colors hover:border-zinc-700 hover:bg-zinc-900/70;
+    @apply flex flex-col rounded-2xl border border-slate-800/80 bg-slate-800/30 p-4 text-left
+      cursor-pointer transition-all hover:border-slate-700 hover:bg-slate-800/60
+      hover:-translate-y-0.5;
   }
   .dash-wide {
     grid-column: 1 / -1;
   }
   .dash-head {
-    @apply flex items-center gap-2 mb-3 text-[11px] font-semibold uppercase tracking-wide text-zinc-500;
+    @apply flex items-center gap-2 mb-3 text-[11px] font-semibold uppercase tracking-wide text-slate-500;
   }
   .dash-head svg {
     color: var(--accent);
   }
   .dash-go {
-    @apply ml-auto text-zinc-600 transition-transform;
+    @apply ml-auto text-slate-600 transition-transform;
   }
   .dash-card:hover .dash-go {
-    @apply translate-x-0.5 text-zinc-400;
+    @apply translate-x-0.5 text-slate-400;
   }
   .dash-body {
     @apply flex-1;
   }
   .dash-big {
-    @apply text-xl font-semibold tracking-tight text-zinc-50;
+    @apply text-xl font-semibold tracking-tight text-slate-50;
     font-variant-numeric: tabular-nums;
   }
   .dash-mono {
@@ -231,7 +236,7 @@
     @apply text-base;
   }
   .dash-sub {
-    @apply mt-1 text-xs text-zinc-500;
+    @apply mt-1 text-xs text-slate-500;
   }
   .dash-flag {
     @apply mt-2 text-xs text-green-400;
@@ -246,7 +251,7 @@
     @apply flex-1 min-w-40;
   }
   .dash-species {
-    @apply text-lg font-medium text-zinc-50;
+    @apply text-lg font-medium text-slate-50;
   }
   .dash-value {
     @apply mt-2 text-sm;
@@ -257,61 +262,61 @@
     @apply flex flex-col gap-1.5;
   }
   .dash-body-row {
-    @apply flex items-center justify-between gap-3 rounded-md px-2 py-1.5 text-sm text-zinc-300
-      bg-zinc-950/40;
+    @apply flex items-center justify-between gap-3 rounded-md px-2 py-1.5 text-sm text-slate-300
+      bg-slate-950/40;
   }
   .dash-body-meta {
-    @apply text-xs text-zinc-500;
+    @apply text-xs text-slate-500;
     font-variant-numeric: tabular-nums;
   }
 
   /* ── Paleta de comandos ── */
   .cmdk-backdrop {
-    @apply fixed inset-0 z-[150] flex items-start justify-center bg-zinc-950/70 backdrop-blur-sm pt-[12vh];
+    @apply fixed inset-0 z-[150] flex items-start justify-center bg-slate-950/70 backdrop-blur-sm pt-[12vh];
     animation: fade-in-fast 0.15s ease both;
   }
   .cmdk {
-    @apply w-[min(560px,calc(100%-40px))] overflow-hidden rounded-xl border border-zinc-700
-      bg-zinc-900 shadow-2xl;
+    @apply w-[min(560px,calc(100%-40px))] overflow-hidden rounded-xl border border-slate-700
+      bg-slate-900 shadow-2xl;
     animation: cmdk-in 0.2s var(--ease) both;
   }
   .cmdk-input {
-    @apply w-full border-none bg-transparent px-4 py-3.5 text-sm text-zinc-100 outline-none
-      border-b border-zinc-800;
+    @apply w-full border-none bg-transparent px-4 py-3.5 text-sm text-slate-100 outline-none
+      border-b border-slate-800;
   }
   .cmdk-input::placeholder {
-    @apply text-zinc-600;
+    @apply text-slate-600;
   }
   .cmdk-list {
     @apply max-h-80 overflow-y-auto p-1.5;
   }
   .cmdk-item {
-    @apply flex w-full items-center gap-3 rounded-md px-3 py-2 text-sm text-zinc-300
+    @apply flex w-full items-center gap-3 rounded-md px-3 py-2 text-sm text-slate-300
       border-none bg-transparent cursor-pointer text-left;
   }
   .cmdk-item.sel {
-    @apply bg-zinc-800 text-zinc-50;
+    @apply bg-slate-800 text-slate-50;
   }
   .cmdk-item.sel svg {
     color: var(--accent);
   }
   .cmdk-kind {
-    @apply ml-auto text-[10px] uppercase tracking-wide text-zinc-600;
+    @apply ml-auto text-[10px] uppercase tracking-wide text-slate-600;
   }
   .cmdk-empty {
-    @apply px-3 py-6 text-center text-sm text-zinc-500;
+    @apply px-3 py-6 text-center text-sm text-slate-500;
   }
   .cmdk-foot {
-    @apply flex gap-4 border-t border-zinc-800 px-4 py-2 text-[10px] text-zinc-600;
+    @apply flex gap-4 border-t border-slate-800 px-4 py-2 text-[10px] text-slate-600;
   }
 
   /* ── Tarjetas ── */
   .panel {
-    @apply relative rounded-xl border border-zinc-800 bg-zinc-900/40 p-5 mb-5
-      transition-colors hover:border-zinc-700;
+    @apply relative rounded-2xl border border-slate-800/80 bg-slate-800/30 p-5 mb-4
+      transition-colors hover:border-slate-700;
   }
   .panel h2 {
-    @apply flex items-center gap-2 mb-4 text-sm font-semibold tracking-tight text-zinc-100;
+    @apply flex items-center gap-2 mb-4 text-sm font-semibold tracking-tight text-slate-100;
   }
   .panel h2 svg {
     @apply shrink-0;
@@ -329,7 +334,7 @@
   }
 
   .species {
-    @apply font-medium text-zinc-100;
+    @apply font-medium text-slate-100;
   }
 
   .kv {
@@ -338,10 +343,10 @@
     font-variant-numeric: tabular-nums;
   }
   .kv .k {
-    @apply text-zinc-500;
+    @apply text-slate-500;
   }
   .kv .v {
-    @apply text-right text-zinc-200;
+    @apply text-right text-slate-200;
   }
   .v.hi {
     color: var(--hi);
@@ -361,14 +366,14 @@
   }
 
   .stat {
-    @apply rounded-lg border border-zinc-800 bg-zinc-900/60 p-4 transition-colors hover:border-zinc-700;
+    @apply rounded-xl border border-slate-800/80 bg-slate-900/50 p-4 transition-colors hover:border-slate-700;
   }
   .stat .n {
-    @apply text-2xl font-semibold tracking-tight text-zinc-50;
+    @apply text-2xl font-semibold tracking-tight text-slate-50;
     font-variant-numeric: tabular-nums;
   }
   .stat .l {
-    @apply mt-1 text-[11px] font-medium uppercase tracking-wide text-zinc-500 leading-relaxed;
+    @apply mt-1 text-[11px] font-medium uppercase tracking-wide text-slate-500 leading-relaxed;
   }
 
   /* ── Tablas ── */
@@ -376,10 +381,10 @@
     @apply w-full border-collapse text-sm;
   }
   th {
-    @apply text-left px-3 py-2 text-xs font-medium text-zinc-500 border-b border-zinc-800;
+    @apply text-left px-3 py-2 text-xs font-medium text-slate-500 border-b border-slate-800;
   }
   td {
-    @apply px-3 py-2.5 text-zinc-300 border-b border-zinc-800/60;
+    @apply px-3 py-2.5 text-slate-300 border-b border-slate-800/60;
   }
   td.num,
   th.num {
@@ -387,7 +392,7 @@
     font-variant-numeric: tabular-nums;
   }
   tbody tr {
-    @apply transition-colors hover:bg-zinc-800/40;
+    @apply transition-colors hover:bg-slate-800/40;
   }
   tbody tr:last-child td {
     @apply border-b-0;
@@ -398,14 +403,14 @@
 
   /* ── Listas ── */
   .genus-row {
-    @apply flex items-center gap-2 rounded-md px-2 py-2 text-sm text-zinc-300
-      transition-colors hover:bg-zinc-800/50;
+    @apply flex items-center gap-2 rounded-md px-2 py-2 text-sm text-slate-300
+      transition-colors hover:bg-slate-800/50;
   }
   .genus-row .check {
     @apply w-4 shrink-0 text-green-400;
   }
   .genus-row .pending {
-    @apply text-zinc-300;
+    @apply text-slate-300;
   }
   .genus-row .leader {
     @apply flex-1 min-w-6;
@@ -420,7 +425,7 @@
 
   /* ── Barras y pasos ── */
   .bar-wrap {
-    @apply h-2 overflow-hidden rounded-full bg-zinc-800 my-2;
+    @apply h-2 overflow-hidden rounded-full bg-slate-800 my-2;
   }
   .bar {
     @apply h-full rounded-full transition-[width] duration-500;
@@ -433,7 +438,7 @@
     @apply flex gap-1.5 my-2.5;
   }
   .step {
-    @apply flex-1 h-1.5 rounded-full bg-zinc-800;
+    @apply flex-1 h-1.5 rounded-full bg-slate-800;
   }
   .step.done {
     background: var(--accent);
@@ -442,9 +447,9 @@
   /* ── Botones ── */
   button.hud {
     @apply inline-flex items-center justify-center gap-2 h-9 px-4 rounded-md
-      border border-zinc-700 bg-zinc-800/60 text-sm font-medium text-zinc-100
+      border border-slate-700 bg-slate-800/60 text-sm font-medium text-slate-100
       cursor-pointer whitespace-nowrap transition-colors
-      hover:bg-zinc-700/70 hover:border-zinc-600
+      hover:bg-slate-700/70 hover:border-slate-600
       disabled:opacity-50 disabled:pointer-events-none;
   }
   button.hud svg {
@@ -460,15 +465,15 @@
     filter: brightness(1.1);
   }
   button.hud.ghost {
-    @apply border-transparent bg-transparent text-zinc-400 hover:bg-zinc-800 hover:text-zinc-100;
+    @apply border-transparent bg-transparent text-slate-400 hover:bg-slate-800 hover:text-slate-100;
   }
   button.hud.danger {
     @apply border-red-500/30 bg-red-500/10 text-red-400 hover:bg-red-500/20 hover:border-red-500/50;
   }
   button.mini {
-    @apply inline-flex items-center gap-1.5 h-7 px-2.5 rounded-md border border-zinc-700
-      bg-zinc-800/50 text-xs font-medium text-zinc-300 cursor-pointer whitespace-nowrap
-      transition-colors hover:bg-zinc-700 hover:text-zinc-50;
+    @apply inline-flex items-center gap-1.5 h-7 px-2.5 rounded-md border border-slate-700
+      bg-slate-800/50 text-xs font-medium text-slate-300 cursor-pointer whitespace-nowrap
+      transition-colors hover:bg-slate-700 hover:text-slate-50;
   }
 
   button.hud:focus-visible,
@@ -479,19 +484,19 @@
   .langbtn:focus-visible,
   input.hud:focus-visible,
   select.hud:focus-visible {
-    @apply outline-none ring-2 ring-offset-2 ring-offset-zinc-950;
+    @apply outline-none ring-2 ring-offset-2 ring-offset-slate-950;
     --tw-ring-color: var(--accent);
   }
 
   /* ── Campos ── */
   input.hud,
   select.hud {
-    @apply h-9 w-full rounded-md border border-zinc-700 bg-zinc-950/60 px-3 text-sm text-zinc-100
-      transition-colors hover:border-zinc-600 focus:outline-none;
+    @apply h-9 w-full rounded-md border border-slate-700 bg-slate-950/60 px-3 text-sm text-slate-100
+      transition-colors hover:border-slate-600 focus:outline-none;
     font-family: var(--font-mono);
   }
   input.hud::placeholder {
-    @apply text-zinc-600;
+    @apply text-slate-600;
   }
   input.hud:focus,
   select.hud:focus {
@@ -506,23 +511,23 @@
     background-repeat: no-repeat;
   }
   select.hud option {
-    @apply bg-zinc-900 text-zinc-100;
+    @apply bg-slate-900 text-slate-100;
   }
   label.hud {
-    @apply flex items-center gap-2 mt-4 mb-1.5 text-xs font-medium text-zinc-400;
+    @apply flex items-center gap-2 mt-4 mb-1.5 text-xs font-medium text-slate-400;
   }
   label.hud:first-of-type {
     @apply mt-1;
   }
 
   .muted {
-    @apply text-[13px] leading-relaxed text-zinc-500;
+    @apply text-[13px] leading-relaxed text-slate-500;
   }
   .warn {
     @apply text-xs text-red-400;
   }
   .empty {
-    @apply flex flex-col items-center gap-2.5 py-8 px-5 text-center text-zinc-500 leading-relaxed;
+    @apply flex flex-col items-center gap-2.5 py-8 px-5 text-center text-slate-500 leading-relaxed;
   }
   .empty svg {
     @apply opacity-40;
@@ -532,7 +537,7 @@
     @apply mb-3 text-xs;
   }
   .rank-row .rn {
-    @apply flex justify-between mb-1.5 text-zinc-400;
+    @apply flex justify-between mb-1.5 text-slate-400;
   }
   .rank-row .rn b {
     @apply font-medium;
@@ -545,19 +550,19 @@
     @apply flex flex-wrap gap-2;
   }
   .swatch {
-    @apply inline-flex items-center gap-2 h-9 px-3 rounded-md border border-zinc-700
-      bg-zinc-800/40 text-xs font-medium text-zinc-300 cursor-pointer transition-colors
-      hover:bg-zinc-700/60;
+    @apply inline-flex items-center gap-2 h-9 px-3 rounded-md border border-slate-700
+      bg-slate-800/40 text-xs font-medium text-slate-300 cursor-pointer transition-colors
+      hover:bg-slate-700/60;
   }
   .swatch.active {
-    @apply bg-zinc-800 text-zinc-50;
+    @apply bg-slate-800 text-slate-50;
     border-color: var(--accent);
   }
   .swatch .sample {
     @apply w-4 h-4 rounded-full;
   }
   input[type='color'].colorpick {
-    @apply h-9 w-12 rounded-md border border-zinc-700 bg-zinc-900 p-1 cursor-pointer;
+    @apply h-9 w-12 rounded-md border border-slate-700 bg-slate-900 p-1 cursor-pointer;
   }
   input[type='range'].slider {
     @apply flex-1 h-1 cursor-pointer;
@@ -567,21 +572,21 @@
     @apply flex gap-2;
   }
   .langbtn {
-    @apply inline-flex items-center gap-2 h-9 px-4 rounded-md border border-zinc-700
-      bg-zinc-800/40 text-sm font-medium text-zinc-300 cursor-pointer transition-colors
-      hover:bg-zinc-700/60;
+    @apply inline-flex items-center gap-2 h-9 px-4 rounded-md border border-slate-700
+      bg-slate-800/40 text-sm font-medium text-slate-300 cursor-pointer transition-colors
+      hover:bg-slate-700/60;
   }
   .langbtn.active {
-    @apply bg-zinc-800 text-zinc-50;
+    @apply bg-slate-800 text-slate-50;
     border-color: var(--accent);
   }
 
   /* ── Diálogos (onboarding / actualización) ── */
   .onboard {
-    @apply absolute inset-0 z-50 grid place-items-center rounded-xl bg-zinc-950/80 backdrop-blur-sm;
+    @apply absolute inset-0 z-50 grid place-items-center rounded-xl bg-slate-950/80 backdrop-blur-sm;
   }
   .ob-card {
-    @apply w-[min(520px,calc(100%-60px))] rounded-xl border border-zinc-800 bg-zinc-900 p-8 text-center shadow-2xl;
+    @apply w-[min(520px,calc(100%-60px))] rounded-xl border border-slate-800 bg-slate-900 p-8 text-center shadow-2xl;
   }
   .ob-card .logo-big {
     @apply w-16 h-16 mx-auto mb-4 rounded-xl grid place-items-center;
@@ -589,10 +594,10 @@
     color: var(--accent);
   }
   .ob-card h2 {
-    @apply mb-2 text-lg font-semibold tracking-tight text-zinc-50;
+    @apply mb-2 text-lg font-semibold tracking-tight text-slate-50;
   }
   .ob-card p {
-    @apply mb-5 text-sm leading-relaxed text-zinc-400;
+    @apply mb-5 text-sm leading-relaxed text-slate-400;
   }
   .ob-langs {
     @apply flex justify-center gap-3 mb-2;
@@ -601,7 +606,7 @@
     @apply flex justify-center gap-2 my-5;
   }
   .ob-dots span {
-    @apply w-2 h-2 rounded-full bg-zinc-700 transition-all;
+    @apply w-2 h-2 rounded-full bg-slate-700 transition-all;
   }
   .ob-dots span.on {
     @apply w-5;
@@ -611,16 +616,16 @@
     @apply flex justify-center gap-3;
   }
   .ob-skip {
-    @apply mt-3.5 bg-transparent border-none cursor-pointer text-xs text-zinc-500 underline hover:text-zinc-300;
+    @apply mt-3.5 bg-transparent border-none cursor-pointer text-xs text-slate-500 underline hover:text-slate-300;
   }
 
   /* ── Overlay ── */
   .ov {
-    @apply h-screen flex flex-col overflow-hidden rounded-xl border border-zinc-800 text-sm backdrop-blur-xl;
+    @apply h-screen flex flex-col overflow-hidden rounded-xl border border-slate-800 text-sm backdrop-blur-xl;
     background: rgb(9 9 11 / calc(var(--bg-o) * 0.9));
   }
   .ov-header {
-    @apply flex items-center gap-2 px-3 py-2 border-b border-zinc-800 text-xs font-semibold text-zinc-200;
+    @apply flex items-center gap-2 px-3 py-2 border-b border-slate-800 text-xs font-semibold text-slate-200;
     -webkit-app-region: drag;
   }
   .ov-header .dot {
@@ -629,7 +634,7 @@
     box-shadow: 0 0 8px var(--good);
   }
   .ov-header .dot.off {
-    @apply bg-zinc-600 shadow-none;
+    @apply bg-slate-600 shadow-none;
   }
   .ov-body {
     @apply flex-1 overflow-y-auto px-3 py-2.5;
@@ -638,7 +643,7 @@
     @apply mb-3;
   }
   .ov-section h3 {
-    @apply flex items-center gap-2 mb-1.5 text-[10px] font-semibold uppercase tracking-wide text-zinc-500;
+    @apply flex items-center gap-2 mb-1.5 text-[10px] font-semibold uppercase tracking-wide text-slate-500;
   }
   .ov-big {
     @apply text-[15px] font-medium;
@@ -648,7 +653,7 @@
     @apply grid place-items-center my-1;
   }
   .ov-footer {
-    @apply flex justify-between border-t border-zinc-800 px-3 py-2 text-xs text-zinc-400;
+    @apply flex justify-between border-t border-slate-800 px-3 py-2 text-xs text-slate-400;
     font-variant-numeric: tabular-nums;
   }
   .ov-footer .total {
@@ -669,7 +674,7 @@
     grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
   }
   .dex-card {
-    @apply rounded-lg border border-zinc-800 bg-zinc-900/60 p-3 transition-colors hover:border-zinc-700;
+    @apply rounded-lg border border-slate-800 bg-slate-900/60 p-3 transition-colors hover:border-slate-700;
   }
   .dex-card.dex-unknown {
     @apply opacity-45;
@@ -678,22 +683,22 @@
     @apply flex items-baseline justify-between gap-2 mb-1;
   }
   .dex-name {
-    @apply text-sm font-medium text-zinc-100;
+    @apply text-sm font-medium text-slate-100;
   }
   .dex-rar {
     @apply text-[10px] font-semibold uppercase tracking-wide;
   }
   .dex-value {
-    @apply text-xs text-zinc-500;
+    @apply text-xs text-slate-500;
     font-variant-numeric: tabular-nums;
   }
   .dex-chips {
     @apply flex flex-wrap gap-1.5 mt-2;
   }
   .dex-chip {
-    @apply rounded-full border border-zinc-700 bg-zinc-800/60 px-2 py-0.5 text-[10px] text-zinc-300;
+    @apply rounded-full border border-slate-700 bg-slate-800/60 px-2 py-0.5 text-[10px] text-slate-300;
   }
-  .rar-common { @apply text-zinc-400; }
+  .rar-common { @apply text-slate-400; }
   .rar-uncommon { @apply text-green-400; }
   .rar-rare { @apply text-sky-400; }
   .rar-legendary { color: var(--hi); }
@@ -701,22 +706,22 @@
 
   /* ── Predicción ── */
   .pred-block {
-    @apply mt-3 pt-3 border-t border-zinc-800;
+    @apply mt-3 pt-3 border-t border-slate-800;
   }
   .pred-head {
     @apply mb-1.5 text-[11px] font-medium uppercase tracking-wide text-sky-400;
   }
   .pred-row {
-    @apply flex items-center gap-2 rounded-md px-2 py-1.5 text-sm transition-colors hover:bg-zinc-800/40;
+    @apply flex items-center gap-2 rounded-md px-2 py-1.5 text-sm transition-colors hover:bg-slate-800/40;
   }
   .pred-row .pred-name {
-    @apply text-zinc-400;
+    @apply text-slate-400;
   }
   .pred-row .leader {
     @apply flex-1 min-w-6;
   }
   .pred-row .pred-val {
-    @apply shrink-0 text-xs text-zinc-400;
+    @apply shrink-0 text-xs text-slate-400;
     font-variant-numeric: tabular-nums;
   }
   .pred-row.jackpot .pred-name,
@@ -729,7 +734,7 @@
     @apply flex items-center gap-3 py-1.5;
   }
   .grow-name {
-    @apply w-28 shrink-0 inline-flex items-center gap-1.5 text-sm text-zinc-300;
+    @apply w-28 shrink-0 inline-flex items-center gap-1.5 text-sm text-slate-300;
   }
   .grow-name svg {
     @apply text-green-400;
@@ -738,7 +743,7 @@
     @apply flex-1 my-0;
   }
   .grow-count {
-    @apply w-12 shrink-0 text-right text-xs text-zinc-500;
+    @apply w-12 shrink-0 text-right text-xs text-slate-500;
     font-variant-numeric: tabular-nums;
   }
   .map-legend {
@@ -851,4 +856,94 @@
   .splash * { animation-duration: 0.01ms !important; animation-delay: 0s !important; }
   .splash-mark .scan, .splash-mark .leaf-line, .splash-mark .vein { stroke-dashoffset: 0; }
   .splash-mark .leaf-fill, .splash-word, .splash-sub, .splash-line, .splash-status { opacity: 1; }
+}
+
+/* ── Bitácora en vivo (columna derecha) ─────────────────────────
+   Inspirada en el panel de chat de los dashboards de gaming: una
+   línea temporal de tus hallazgos, siempre visible mientras juegas. */
+@layer components {
+  .feed {
+    @apply w-72 shrink-0 flex flex-col border-l border-slate-800/80 bg-slate-900/30;
+  }
+  .feed-head {
+    @apply flex items-center gap-2 px-4 py-3 border-b border-slate-800/80;
+  }
+  .feed-title {
+    @apply text-[11px] font-semibold uppercase tracking-wide text-slate-400;
+  }
+  .feed-count {
+    @apply ml-auto rounded-full bg-slate-800 px-2 py-0.5 text-[10px] font-medium text-slate-400;
+    font-variant-numeric: tabular-nums;
+  }
+  .feed-summary {
+    @apply flex flex-wrap gap-2 px-3 py-2.5 border-b border-slate-800/60;
+  }
+  .feed-sum-item {
+    @apply inline-flex items-center gap-1.5 rounded-lg bg-slate-800/60 px-2 py-1
+      text-[11px] font-medium text-slate-300 max-w-full;
+    font-variant-numeric: tabular-nums;
+  }
+  .feed-sum-item svg {
+    @apply shrink-0;
+    color: var(--accent);
+  }
+  .feed-list {
+    @apply flex-1 overflow-y-auto p-2 flex flex-col gap-1.5;
+  }
+  .feed-item {
+    @apply flex items-start gap-2.5 rounded-xl p-2 transition-colors hover:bg-slate-800/50;
+  }
+  .feed-avatar {
+    @apply w-8 h-8 shrink-0 rounded-lg grid place-items-center bg-slate-800 text-slate-400;
+  }
+  .feed-avatar.rar-uncommon { @apply bg-green-500/15 text-green-400; }
+  .feed-avatar.rar-rare { @apply bg-sky-500/15 text-sky-400; }
+  .feed-avatar.rar-legendary {
+    background: var(--soft);
+    color: var(--hi);
+  }
+  .feed-avatar.av-codex { @apply bg-violet-500/15 text-violet-400; }
+  .feed-body { @apply min-w-0 flex-1; }
+  .feed-row { @apply flex items-baseline gap-2; }
+  .feed-name { @apply truncate text-[13px] font-medium text-slate-200; }
+  .feed-flag { color: var(--hi); }
+  .feed-time {
+    @apply ml-auto shrink-0 text-[10px] text-slate-500;
+    font-variant-numeric: tabular-nums;
+  }
+  .feed-sub { @apply truncate text-[11px] text-slate-500; }
+  .feed-val {
+    @apply ml-auto shrink-0 text-[11px] text-slate-400;
+    font-variant-numeric: tabular-nums;
+  }
+  .feed-empty { @apply px-3 py-8 text-center text-xs text-slate-600; }
+
+  /* ── Tarjetas de acción de colores (las "promo cards" del mockup) ── */
+  .act-grid {
+    @apply grid gap-3 mb-4;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  }
+  .act-card {
+    @apply relative overflow-hidden rounded-2xl p-4 text-left cursor-pointer border-none
+      transition-transform hover:-translate-y-0.5;
+    min-height: 104px;
+  }
+  .act-card::after {
+    content: '';
+    @apply absolute -right-6 -bottom-8 w-24 h-24 rounded-full opacity-25;
+    background: rgba(255, 255, 255, 0.5);
+  }
+  .act-blue { background: linear-gradient(145deg, #5b8cff, #3b5bdb); }
+  .act-violet { background: linear-gradient(145deg, #a78bfa, #7c3aed); }
+  .act-coral { background: linear-gradient(145deg, #fb8a8a, #e05252); }
+  .act-icon {
+    @apply mb-3 w-9 h-9 rounded-xl grid place-items-center text-white;
+    background: rgba(255, 255, 255, 0.2);
+  }
+  .act-title {
+    @apply relative z-10 text-sm font-semibold text-white;
+  }
+  .act-sub {
+    @apply relative z-10 mt-1 text-[11px] leading-snug text-white/75;
+  }
 }

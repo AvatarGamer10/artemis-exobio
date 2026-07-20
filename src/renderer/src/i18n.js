@@ -9,6 +9,9 @@ const dict = {
     navSystem: 'Sistema',
     navTargets: 'Objetivos',
     navHome: 'Inicio',
+    feedTitle: 'BITÁCORA EN VIVO',
+    feedEmpty: 'Aún no hay actividad. Tus muestras y descubrimientos aparecerán aquí.',
+
     dashSampling: 'MUESTREO EN CURSO',
     dashSystem: 'SISTEMA ACTUAL',
     dashVault: 'CARTERA',
@@ -315,6 +318,9 @@ const dict = {
     navSystem: 'System',
     navTargets: 'Targets',
     navHome: 'Home',
+    feedTitle: 'LIVE LOG',
+    feedEmpty: 'No activity yet. Your samples and discoveries will show up here.',
+
     dashSampling: 'SAMPLING NOW',
     dashSystem: 'CURRENT SYSTEM',
     dashVault: 'WALLET',
