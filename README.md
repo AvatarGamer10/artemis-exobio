@@ -4,7 +4,7 @@ Desktop app (Electron + React) that reads the Elite Dangerous: Odyssey journal i
 real time and assists you through the entire exobiology loop, with an in-game
 overlay for playing and a full window for planning.
 
-![version](https://img.shields.io/badge/version-0.13.0-orange) ![platform](https://img.shields.io/badge/platform-Windows-blue)
+![version](https://img.shields.io/badge/version-0.14.0-orange) ![platform](https://img.shields.io/badge/platform-Windows-blue)
 
 🇪🇸 [Léeme en español](README.es.md)
 
@@ -51,6 +51,8 @@ overlay for playing and a full window for planning.
 - **Sound alerts**: sample completed, jackpot fanfare (≥15M), colony radius
   cleared, low fuel. Synthesized — no audio files.
 - **Inara**: CMDR profile with ranks and progress (personal API key).
+- **Interface**: Home screen with live status cards, an icon rail grouped by moment
+  of use, a command palette (`Ctrl+K`) and a live log of your latest finds.
 - **Overlay** always on top (`Ctrl+Alt+O` show/hide, `Ctrl+Alt+M` click-through)
   plus a full window. Customizable theme (accent color, opacity), ES/EN language,
   welcome tour.

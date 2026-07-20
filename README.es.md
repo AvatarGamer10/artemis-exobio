@@ -4,7 +4,7 @@ App de escritorio (Electron + React) que lee el journal de Elite Dangerous: Odys
 tiempo real y te asiste en todo el flujo de exobiología, con overlay para jugar y
 ventana completa para planificar.
 
-![version](https://img.shields.io/badge/version-0.13.0-orange) ![platform](https://img.shields.io/badge/platform-Windows-blue)
+![version](https://img.shields.io/badge/version-0.14.0-orange) ![platform](https://img.shields.io/badge/platform-Windows-blue)
 
 🇬🇧 [Read in English](README.md)
 
@@ -50,6 +50,9 @@ ventana completa para planificar.
 - **Alertas sonoras**: muestra completada, fanfarria de premio gordo (≥15M), radio de
   colonia superado, combustible bajo. Sintetizadas, sin archivos de audio.
 - **Inara**: perfil de CMDR con rangos y progreso (API key personal).
+- **Interfaz**: pantalla de Inicio con tarjetas de estado en vivo, rail de iconos
+  agrupado por momento de uso, paleta de comandos (`Ctrl+K`) y bitácora en vivo con
+  tus últimos hallazgos.
 - **Overlay** siempre encima (`Ctrl+Alt+O` mostrar/ocultar, `Ctrl+Alt+M` clics
   atraviesan) + ventana completa. Tema personalizable (color de acento, opacidad),
   idioma ES/EN, tour de bienvenida.
