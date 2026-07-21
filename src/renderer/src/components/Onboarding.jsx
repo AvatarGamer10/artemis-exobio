@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { useT } from '../i18n.js'
+import suitImg from '../assets/artemis-suit.webp'
 import { IconLeaf, IconPlanet, IconEye, IconWallet, IconSync } from '../Icons.jsx'
 
 const STEP_ICONS = [IconPlanet, IconEye, IconWallet, IconSync]
@@ -20,6 +21,8 @@ export default function Onboarding({ lang }) {
     return (
       <div className="onboard">
         <div className="ob-card">
+          {/* El traje de exploración que da nombre a la app */}
+          <img className="ob-hero" src={suitImg} alt="" />
           <div className="logo-big">
             <IconLeaf size={34} />
           </div>

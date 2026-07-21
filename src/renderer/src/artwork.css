@@ -1,0 +1,65 @@
+/* ═══ ILUSTRACIÓN ════════════════════════════════════════════════
+   Arte del juego integrado sin robar protagonismo a los datos:
+   siempre detrás del contenido, atenuado y teñido por el acento.
+   El guante del Genetic Sampler viene sobre negro sólido, así que
+   se funde con `mix-blend-mode: screen` (el negro desaparece). */
+
+/* ── Panel de muestreo: el sampler como marca de agua ── */
+.sampling-panel { position: relative; overflow: hidden; }
+.sampling-panel > *:not(.sampler-art) { position: relative; z-index: 1; }
+.sampler-art {
+  position: absolute;
+  right: -34px; top: 50%;
+  transform: translateY(-50%) scaleX(-1);
+  height: 132%;
+  max-width: 46%;
+  object-fit: contain;
+  mix-blend-mode: screen; /* funde el fondo negro de la imagen */
+  opacity: 0.3;
+  pointer-events: none; user-select: none;
+  filter: saturate(0.75) contrast(1.05);
+  /* se desvanece hacia el texto para no competir con él */
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 55%, #000);
+  mask-image: linear-gradient(90deg, transparent, #000 55%, #000);
+}
+@media (max-width: 1100px) {
+  .sampler-art { opacity: 0.16; }
+}
+
+/* ── Bienvenida: el traje que da nombre a la app ── */
+.ob-hero {
+  display: block;
+  width: calc(100% + 72px);
+  margin: -32px -36px 20px;
+  max-width: none;
+  object-fit: cover;
+  aspect-ratio: 350 / 152;
+  object-position: center 42%;
+  opacity: 0.92;
+  /* se difumina por abajo para entrar en la lámina sin costura */
+  -webkit-mask-image: linear-gradient(180deg, #000 45%, transparent);
+  mask-image: linear-gradient(180deg, #000 45%, transparent);
+}
+.ob-card .ob-hero + .logo-big { margin-top: -46px; position: relative; }
+
+/* ── Arranque: telón de fondo ── */
+.splash-bg {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  opacity: 0.2;
+  filter: saturate(0.85) blur(1px);
+  pointer-events: none; user-select: none;
+  -webkit-mask-image: radial-gradient(circle at 50% 45%, transparent 18%, #000 72%);
+  mask-image: radial-gradient(circle at 50% 45%, transparent 18%, #000 72%);
+  animation: splash-bg-in 2.2s var(--ease) both;
+}
+@keyframes splash-bg-in {
+  from { opacity: 0; transform: scale(1.08); }
+  to { opacity: 0.2; transform: scale(1); }
+}
+.splash-inner { position: relative; z-index: 1; }
+
+@media (prefers-reduced-motion: reduce) {
+  .splash-bg { animation: none; opacity: 0.2; }
+}

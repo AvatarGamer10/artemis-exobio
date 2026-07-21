@@ -3,6 +3,7 @@ import { cr } from '../useArtemis.js'
 import SystemMap from './SystemMap.jsx'
 import SamplerDial from './SamplerDial.jsx'
 import SurfaceMap from './SurfaceMap.jsx'
+import samplerImg from '../assets/genetic-sampler.webp'
 import { IconPlanet, IconLeaf, IconWalk, IconRadar, IconCheck, IconSync } from '../Icons.jsx'
 
 function ExternalContext({ ext, t }) {
@@ -61,7 +62,9 @@ function ExternalContext({ ext, t }) {
 function Sampling({ s, t, state }) {
   if (!s) return null
   return (
-    <div className="panel">
+    <div className="panel sampling-panel">
+      {/* El Genetic Sampler, en marca de agua: el negro se funde con la lámina */}
+      <img className="sampler-art" src={samplerImg} alt="" />
       <h2>
         <IconWalk size={16} /> {t('samplingTitle')}
       </h2>

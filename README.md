@@ -4,7 +4,7 @@ Desktop app (Electron + React) that reads the Elite Dangerous: Odyssey journal i
 real time and assists you through the entire exobiology loop, with an in-game
 overlay for playing and a full window for planning.
 
-![version](https://img.shields.io/badge/version-0.14.0-orange) ![platform](https://img.shields.io/badge/platform-Windows-blue)
+![version](https://img.shields.io/badge/version-0.14.1-orange) ![platform](https://img.shields.io/badge/platform-Windows-blue)
 
 🇪🇸 [Léeme en español](README.es.md)
 
@@ -104,3 +104,7 @@ Artemis stands on the shoulders of the Elite Dangerous community:
 boundaries from
 [klightspeed/EliteDangerousRegionMap](https://github.com/klightspeed/EliteDangerousRegionMap)
 (MIT). Thank you for keeping the galaxy mapped. o7
+
+Elite Dangerous and the in-game imagery used in the app are property of Frontier
+Developments plc. Artemis is a non-commercial fan work, not affiliated with or
+endorsed by Frontier.

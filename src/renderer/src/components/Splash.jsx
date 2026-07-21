@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import suitImg from '../assets/artemis-suit.webp'
 
 // Pantalla de inicio: el instrumento se enciende. El arco de escaneo barre,
 // la hoja se dibuja trazo a trazo y el nombre se abre. Clic o tecla la salta.
@@ -45,6 +46,8 @@ export default function Splash({ lang = 'es', onDone }) {
 
   return (
     <div className={`splash ${out ? 'out' : ''}`} onClick={skipNow}>
+      {/* Telón de fondo: el paisaje del traje de exploración, muy atenuado */}
+      <img className="splash-bg" src={suitImg} alt="" />
       <div className="splash-inner">
         <svg className="splash-mark" viewBox="0 0 160 160" aria-hidden="true">
           <circle className="tick-ring" cx="80" cy="80" r="66" />
